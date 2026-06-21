@@ -1,0 +1,62 @@
+enqueue:
+  target:
+    entity:
+      domain: media_player
+      integration: ytmusic
+  fields:
+    video_id: { required: true, selector: { text: {} } }
+    title: { selector: { text: {} } }
+    artist: { selector: { text: {} } }
+play_next:
+  target:
+    entity:
+      domain: media_player
+      integration: ytmusic
+  fields:
+    video_id: { required: true, selector: { text: {} } }
+    title: { selector: { text: {} } }
+    artist: { selector: { text: {} } }
+start_radio:
+  target:
+    entity:
+      domain: media_player
+      integration: ytmusic
+  fields:
+    video_id: { required: true, selector: { text: {} } }
+clear_queue:
+  target:
+    entity:
+      domain: media_player
+      integration: ytmusic
+remove:
+  target:
+    entity:
+      domain: media_player
+      integration: ytmusic
+  fields:
+    index: { required: true, selector: { number: { min: 0, mode: box } } }
+move:
+  target:
+    entity:
+      domain: media_player
+      integration: ytmusic
+  fields:
+    from_index: { required: true, selector: { number: { min: 0, mode: box } } }
+    to_index: { required: true, selector: { number: { min: 0, mode: box } } }
+jump:
+  target:
+    entity:
+      domain: media_player
+      integration: ytmusic
+  fields:
+    index: { required: true, selector: { number: { min: 0, mode: box } } }
+set_sleep_timer:
+  target:
+    entity:
+      domain: media_player
+      integration: ytmusic
+  fields:
+    minutes:
+      selector: { number: { min: 0, max: 480, mode: box } }
+    end_of_track:
+      selector: { boolean: {} }

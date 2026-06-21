@@ -1,0 +1,14 @@
+{
+  "domain": "ytmusic",
+  "name": "YouTube Music",
+  "version": "0.1.0",
+  "config_flow": true,
+  "documentation": "https://github.com/stomaskov/ha-ytmusic",
+  "issue_tracker": "https://github.com/stomaskov/ha-ytmusic/issues",
+  "iot_class": "cloud_polling",
+  "integration_type": "service",
+  "dependencies": ["http", "websocket_api"],
+  "after_dependencies": ["frontend"],
+  "requirements": ["ytmusicapi==1.12.1", "yt-dlp==2026.6.9"],
+  "codeowners": ["@stomaskov"]
+}

@@ -1,0 +1,141 @@
+{
+  "contents": {
+    "sectionListRenderer": {
+      "contents": [
+        {
+          "shelfRenderer": {
+            "content": {
+              "horizontalListRenderer": {
+                "items": [
+                  {
+                    "elementRenderer": {
+                      "newElement": {
+                        "type": {
+                          "componentType": {
+                            "model": {
+                              "lockupViewModel": {
+                                "contentImage": {
+                                  "thumbnailViewModel": {
+                                    "image": {
+                                      "sources": [
+                                        {
+                                          "url": "https://i.ytimg.com/vi/vid_song/hqdefault.jpg",
+                                          "width": 320,
+                                          "height": 180
+                                        }
+                                      ]
+                                    }
+                                  }
+                                },
+                                "metadata": {
+                                  "lockupMetadataViewModel": {
+                                    "title": {
+                                      "content": "Song One"
+                                    },
+                                    "metadata": {
+                                      "contentMetadataViewModel": {
+                                        "metadataRows": [
+                                          {
+                                            "metadataParts": [
+                                              {
+                                                "text": {
+                                                  "content": "Artist A"
+                                                }
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "delimiter": " • "
+                                      }
+                                    }
+                                  }
+                                },
+                                "contentId": "vid_song",
+                                "contentType": "LOCKUP_CONTENT_TYPE_MUSIC",
+                                "rendererContext": {
+                                  "loggingContext": {
+                                    "loggingDirectives": {
+                                      "trackingParams": "STUB_TRACKING"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "elementRenderer": {
+                      "newElement": {
+                        "type": {
+                          "componentType": {
+                            "model": {
+                              "lockupViewModel": {
+                                "contentImage": {
+                                  "thumbnailViewModel": {
+                                    "image": {
+                                      "sources": [
+                                        {
+                                          "url": "https://yt3.googleusercontent.com/fake-channel-88",
+                                          "width": 88,
+                                          "height": 88
+                                        },
+                                        {
+                                          "url": "https://yt3.googleusercontent.com/fake-channel-176",
+                                          "width": 176,
+                                          "height": 176
+                                        }
+                                      ]
+                                    }
+                                  }
+                                },
+                                "metadata": {
+                                  "lockupMetadataViewModel": {
+                                    "title": {
+                                      "content": "Artist X"
+                                    },
+                                    "metadata": {
+                                      "contentMetadataViewModel": {
+                                        "metadataRows": [
+                                          {
+                                            "metadataParts": [
+                                              {
+                                                "text": {
+                                                  "content": "@artistx"
+                                                }
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "delimiter": " • "
+                                      }
+                                    }
+                                  }
+                                },
+                                "contentId": "UCfake",
+                                "contentType": "LOCKUP_CONTENT_TYPE_CHANNEL",
+                                "rendererContext": {
+                                  "loggingContext": {
+                                    "loggingDirectives": {
+                                      "trackingParams": "STUB_TRACKING"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

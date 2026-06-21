@@ -1,0 +1,102 @@
+{
+  "contents": {
+    "tvBrowseRenderer": {
+      "content": {
+        "tvSurfaceContentRenderer": {
+          "content": {
+            "gridRenderer": {
+              "items": [
+                {
+                  "tileRenderer": {
+                    "style": "TILE_STYLE_YTLR_VERTICAL_LIST_TRACK",
+                    "header": {
+                      "trackTileHeaderRenderer": {
+                        "index": {
+                          "simpleText": "1"
+                        },
+                        "title": {
+                          "simpleText": "Album Track"
+                        },
+                        "duration": {
+                          "simpleText": "4:36"
+                        },
+                        "thumbnail": {
+                          "thumbnails": [
+                            {
+                              "url": "https://yt3.googleusercontent.com/fake-album-thumb-226",
+                              "width": 226,
+                              "height": 226
+                            },
+                            {
+                              "url": "https://yt3.googleusercontent.com/fake-album-thumb-544",
+                              "width": 544,
+                              "height": 544
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "metadata": null,
+                    "onSelectCommand": {
+                      "clickTrackingParams": "STUB_TRACKING",
+                      "watchEndpoint": {
+                        "videoId": "vida1",
+                        "playlistId": "OLAKfakealbum1"
+                      }
+                    },
+                    "trackingParams": "STUB_TRACKING",
+                    "contentId": "vida1",
+                    "contentType": "TILE_CONTENT_TYPE_VIDEO"
+                  }
+                },
+                {
+                  "tileRenderer": {
+                    "style": "TILE_STYLE_YTLR_VERTICAL_LIST_TRACK",
+                    "header": {
+                      "trackTileHeaderRenderer": {
+                        "index": {
+                          "simpleText": "2"
+                        },
+                        "title": {
+                          "simpleText": "Album Track Two"
+                        },
+                        "duration": {
+                          "simpleText": "3:21"
+                        },
+                        "thumbnail": {
+                          "thumbnails": [
+                            {
+                              "url": "https://yt3.googleusercontent.com/fake-album-thumb-226",
+                              "width": 226,
+                              "height": 226
+                            },
+                            {
+                              "url": "https://yt3.googleusercontent.com/fake-album-thumb-544",
+                              "width": 544,
+                              "height": 544
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "metadata": null,
+                    "onSelectCommand": {
+                      "clickTrackingParams": "STUB_TRACKING",
+                      "watchEndpoint": {
+                        "videoId": "vida2",
+                        "playlistId": "OLAKfakealbum1"
+                      }
+                    },
+                    "trackingParams": "STUB_TRACKING",
+                    "contentId": "vida2",
+                    "contentType": "TILE_CONTENT_TYPE_VIDEO"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

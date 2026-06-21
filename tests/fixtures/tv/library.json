@@ -1,0 +1,157 @@
+{
+  "contents": {
+    "tvBrowseRenderer": {
+      "content": {
+        "tvSecondaryNavRenderer": {
+          "sections": [
+            {
+              "tvSecondaryNavSectionRenderer": {
+                "tabs": [
+                  {
+                    "tabRenderer": {
+                      "selected": true,
+                      "content": {
+                        "tvSurfaceContentRenderer": {
+                          "content": {
+                            "gridRenderer": {
+                              "items": [
+                                {
+                                  "tileRenderer": {
+                                    "style": "TILE_STYLE_YTLR_SQUARE",
+                                    "header": {
+                                      "tileHeaderRenderer": {
+                                        "thumbnail": {
+                                          "thumbnails": [
+                                            {
+                                              "url": "https://lh3.googleusercontent.com/fake-playlist1-192",
+                                              "width": 192,
+                                              "height": 192
+                                            },
+                                            {
+                                              "url": "https://lh3.googleusercontent.com/fake-playlist1-384",
+                                              "width": 384,
+                                              "height": 384
+                                            }
+                                          ]
+                                        },
+                                        "style": "TILE_HEADER_STYLE_RECTANGULAR"
+                                      }
+                                    },
+                                    "metadata": {
+                                      "tileMetadataRenderer": {
+                                        "title": {
+                                          "runs": [
+                                            {
+                                              "text": "Playlist One",
+                                              "navigationEndpoint": {
+                                                "clickTrackingParams": "STUB_TRACKING",
+                                                "browseEndpoint": {
+                                                  "browseId": "VLfake1",
+                                                  "browseEndpointContextSupportedConfigs": {
+                                                    "browseEndpointContextMusicConfig": {
+                                                      "pageType": "MUSIC_PAGE_TYPE_PLAYLIST"
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          ]
+                                        },
+                                        "lines": [
+                                          {
+                                            "lineRenderer": {
+                                              "items": [
+                                                {
+                                                  "lineItemRenderer": {
+                                                    "text": {
+                                                      "simpleText": "Fake User"
+                                                    }
+                                                  }
+                                                }
+                                              ]
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "trackingParams": "STUB_TRACKING"
+                                  }
+                                },
+                                {
+                                  "tileRenderer": {
+                                    "style": "TILE_STYLE_YTLR_SQUARE",
+                                    "header": {
+                                      "tileHeaderRenderer": {
+                                        "thumbnail": {
+                                          "thumbnails": [
+                                            {
+                                              "url": "https://lh3.googleusercontent.com/fake-playlist2-192",
+                                              "width": 192,
+                                              "height": 192
+                                            },
+                                            {
+                                              "url": "https://lh3.googleusercontent.com/fake-playlist2-384",
+                                              "width": 384,
+                                              "height": 384
+                                            }
+                                          ]
+                                        },
+                                        "style": "TILE_HEADER_STYLE_RECTANGULAR"
+                                      }
+                                    },
+                                    "metadata": {
+                                      "tileMetadataRenderer": {
+                                        "title": {
+                                          "runs": [
+                                            {
+                                              "text": "Playlist Two",
+                                              "navigationEndpoint": {
+                                                "clickTrackingParams": "STUB_TRACKING",
+                                                "browseEndpoint": {
+                                                  "browseId": "VLfake2",
+                                                  "browseEndpointContextSupportedConfigs": {
+                                                    "browseEndpointContextMusicConfig": {
+                                                      "pageType": "MUSIC_PAGE_TYPE_PLAYLIST"
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          ]
+                                        },
+                                        "lines": [
+                                          {
+                                            "lineRenderer": {
+                                              "items": [
+                                                {
+                                                  "lineItemRenderer": {
+                                                    "text": {
+                                                      "simpleText": "Fake User"
+                                                    }
+                                                  }
+                                                }
+                                              ]
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "trackingParams": "STUB_TRACKING"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

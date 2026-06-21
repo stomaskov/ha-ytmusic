@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Node / card build
+card/node_modules/
+*.tsbuildinfo
+
+# OS
+.DS_Store
+
+# Never commit real auth material or captured API data
+captures/
+*cookies*.txt
+header_*.json
+secrets.yaml

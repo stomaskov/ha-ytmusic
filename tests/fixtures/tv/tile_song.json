@@ -1,0 +1,75 @@
+{
+  "tileRenderer": {
+    "style": "TILE_STYLE_YTLR_SQUARE",
+    "header": {
+      "tileHeaderRenderer": {
+        "thumbnail": {
+          "thumbnails": [
+            {
+              "url": "https://lh3.googleusercontent.com/fake-song-192",
+              "width": 192,
+              "height": 192
+            },
+            {
+              "url": "https://lh3.googleusercontent.com/fake-song-384",
+              "width": 384,
+              "height": 384
+            }
+          ]
+        },
+        "style": "TILE_HEADER_STYLE_RECTANGULAR",
+        "thumbnailOverlays": [
+          {
+            "thumbnailOverlayTimeStatusRenderer": {
+              "text": {
+                "simpleText": "4:01"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "metadata": {
+      "tileMetadataRenderer": {
+        "title": {
+          "runs": [
+            {
+              "text": "Song One"
+            }
+          ]
+        },
+        "lines": [
+          {
+            "lineRenderer": {
+              "items": [
+                {
+                  "lineItemRenderer": {
+                    "text": {
+                      "simpleText": "Artist A"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "onSelectCommand": {
+      "clickTrackingParams": "STUB_TRACKING",
+      "watchEndpoint": {
+        "videoId": "vid_song",
+        "params": "wAEB"
+      }
+    },
+    "trackingParams": "STUB_TRACKING",
+    "contentId": "vid_song",
+    "contentType": "TILE_CONTENT_TYPE_VIDEO",
+    "onLongPressCommand": {
+      "clickTrackingParams": "STUB_TRACKING",
+      "showMenuCommand": {
+        "contentId": "vid_song"
+      }
+    }
+  }
+}

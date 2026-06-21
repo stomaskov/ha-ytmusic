@@ -1,0 +1,162 @@
+{
+  "contents": {
+    "singleColumnWatchNextResults": {
+      "playlist": {
+        "playlist": {
+          "contents": [
+            {
+              "playlistPanelVideoWrapperRenderer": {
+                "primaryRenderer": {
+                  "tileRenderer": {
+                    "style": "TILE_STYLE_YTLR_DEFAULT",
+                    "header": {
+                      "tileHeaderRenderer": {
+                        "thumbnail": {
+                          "thumbnails": [
+                            {
+                              "url": "https://i.ytimg.com/vi/vidr1/hqdefault.jpg",
+                              "width": 320,
+                              "height": 180
+                            }
+                          ]
+                        },
+                        "thumbnailOverlays": [
+                          {
+                            "thumbnailOverlayTimeStatusRenderer": {
+                              "text": {
+                                "simpleText": "5:22"
+                              },
+                              "style": "DEFAULT"
+                            }
+                          }
+                        ],
+                        "style": "TILE_HEADER_STYLE_RECTANGULAR"
+                      }
+                    },
+                    "metadata": {
+                      "tileMetadataRenderer": {
+                        "title": {
+                          "runs": [
+                            {
+                              "text": "Radio Track",
+                              "navigationEndpoint": {
+                                "clickTrackingParams": "STUB_TRACKING",
+                                "watchEndpoint": {
+                                  "videoId": "vidr1",
+                                  "playlistId": "RDAMVMvidr1"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "lines": [
+                          {
+                            "lineRenderer": {
+                              "items": [
+                                {
+                                  "lineItemRenderer": {
+                                    "text": {
+                                      "simpleText": "Fake Radio Artist"
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "onSelectCommand": {
+                      "clickTrackingParams": "STUB_TRACKING",
+                      "watchEndpoint": {
+                        "videoId": "vidr1",
+                        "playlistId": "RDAMVMvidr1"
+                      }
+                    },
+                    "trackingParams": "STUB_TRACKING"
+                  }
+                },
+                "counterpart": []
+              }
+            },
+            {
+              "playlistPanelVideoWrapperRenderer": {
+                "primaryRenderer": {
+                  "tileRenderer": {
+                    "style": "TILE_STYLE_YTLR_DEFAULT",
+                    "header": {
+                      "tileHeaderRenderer": {
+                        "thumbnail": {
+                          "thumbnails": [
+                            {
+                              "url": "https://i.ytimg.com/vi/vidr2/hqdefault.jpg",
+                              "width": 320,
+                              "height": 180
+                            }
+                          ]
+                        },
+                        "thumbnailOverlays": [
+                          {
+                            "thumbnailOverlayTimeStatusRenderer": {
+                              "text": {
+                                "simpleText": "4:11"
+                              },
+                              "style": "DEFAULT"
+                            }
+                          }
+                        ],
+                        "style": "TILE_HEADER_STYLE_RECTANGULAR"
+                      }
+                    },
+                    "metadata": {
+                      "tileMetadataRenderer": {
+                        "title": {
+                          "runs": [
+                            {
+                              "text": "Radio Track Two",
+                              "navigationEndpoint": {
+                                "clickTrackingParams": "STUB_TRACKING",
+                                "watchEndpoint": {
+                                  "videoId": "vidr2",
+                                  "playlistId": "RDAMVMvidr2"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "lines": [
+                          {
+                            "lineRenderer": {
+                              "items": [
+                                {
+                                  "lineItemRenderer": {
+                                    "text": {
+                                      "simpleText": "Fake Radio Artist Two"
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "onSelectCommand": {
+                      "clickTrackingParams": "STUB_TRACKING",
+                      "watchEndpoint": {
+                        "videoId": "vidr2",
+                        "playlistId": "RDAMVMvidr2"
+                      }
+                    },
+                    "trackingParams": "STUB_TRACKING"
+                  }
+                },
+                "counterpart": []
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

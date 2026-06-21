@@ -1,0 +1,152 @@
+{
+  "contents": {
+    "tvBrowseRenderer": {
+      "content": {
+        "tvSurfaceContentRenderer": {
+          "content": {
+            "gridRenderer": {
+              "items": [
+                {
+                  "tileRenderer": {
+                    "style": "TILE_STYLE_YTLR_VERTICAL_LIST",
+                    "header": {
+                      "tileHeaderRenderer": {
+                        "thumbnail": {
+                          "thumbnails": [
+                            {
+                              "url": "https://i.ytimg.com/vi/vid1/hqdefault.jpg",
+                              "width": 480,
+                              "height": 360
+                            }
+                          ]
+                        },
+                        "thumbnailOverlays": [
+                          {
+                            "thumbnailOverlayTimeStatusRenderer": {
+                              "text": {
+                                "simpleText": "2:58"
+                              },
+                              "style": "DEFAULT"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "metadata": {
+                      "tileMetadataRenderer": {
+                        "title": {
+                          "simpleText": "Track One"
+                        },
+                        "lines": [
+                          {
+                            "lineRenderer": {
+                              "items": [
+                                {
+                                  "lineItemRenderer": {
+                                    "text": {
+                                      "runs": [
+                                        {
+                                          "text": "Artist A",
+                                          "navigationEndpoint": {
+                                            "clickTrackingParams": "STUB_TRACKING",
+                                            "browseEndpoint": {
+                                              "browseId": "UCfakeartist1"
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "onSelectCommand": {
+                      "clickTrackingParams": "STUB_TRACKING",
+                      "watchEndpoint": {
+                        "videoId": "vid1",
+                        "playlistId": "PLfakeplaylist1"
+                      }
+                    },
+                    "trackingParams": "STUB_TRACKING"
+                  }
+                },
+                {
+                  "tileRenderer": {
+                    "style": "TILE_STYLE_YTLR_VERTICAL_LIST",
+                    "header": {
+                      "tileHeaderRenderer": {
+                        "thumbnail": {
+                          "thumbnails": [
+                            {
+                              "url": "https://i.ytimg.com/vi/vid2/hqdefault.jpg",
+                              "width": 480,
+                              "height": 360
+                            }
+                          ]
+                        },
+                        "thumbnailOverlays": [
+                          {
+                            "thumbnailOverlayTimeStatusRenderer": {
+                              "text": {
+                                "simpleText": "3:45"
+                              },
+                              "style": "DEFAULT"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "metadata": {
+                      "tileMetadataRenderer": {
+                        "title": {
+                          "simpleText": "Track Two"
+                        },
+                        "lines": [
+                          {
+                            "lineRenderer": {
+                              "items": [
+                                {
+                                  "lineItemRenderer": {
+                                    "text": {
+                                      "runs": [
+                                        {
+                                          "text": "Artist B",
+                                          "navigationEndpoint": {
+                                            "clickTrackingParams": "STUB_TRACKING",
+                                            "browseEndpoint": {
+                                              "browseId": "UCfakeartist2"
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "onSelectCommand": {
+                      "clickTrackingParams": "STUB_TRACKING",
+                      "watchEndpoint": {
+                        "videoId": "vid2",
+                        "playlistId": "PLfakeplaylist1"
+                      }
+                    },
+                    "trackingParams": "STUB_TRACKING"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

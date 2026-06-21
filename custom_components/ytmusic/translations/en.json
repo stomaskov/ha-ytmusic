@@ -1,0 +1,63 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "YouTube Music",
+        "description": "Choose how to authenticate.",
+        "menu_options": {
+          "oauth": "OAuth (recommended)",
+          "cookie": "Browser cookie"
+        }
+      },
+      "oauth_creds": {
+        "title": "OAuth client",
+        "description": "Paste the client_id and client_secret from your Google Cloud 'TVs & Limited Input devices' OAuth client.",
+        "data": { "client_id": "Client ID", "client_secret": "Client secret" }
+      },
+      "oauth_device": {
+        "title": "Authorize",
+        "description": "{prompt}\n\nThen submit to finish."
+      },
+      "cookie": {
+        "title": "Browser cookie",
+        "description": "Paste the full Cookie header from a logged-in music.youtube.com request.",
+        "data": { "cookie": "Cookie header" }
+      },
+      "stream_cookie": {
+        "title": "Stream cookie (optional)",
+        "description": "Optional: paste a browser cookie used only by yt-dlp for bulletproof playback. Leave blank to skip.",
+        "data": { "stream_cookie": "Stream cookie" }
+      },
+      "reauth_confirm": {
+        "title": "Re-authenticate",
+        "description": "{prompt}",
+        "data": { "cookie": "Cookie header" }
+      }
+    },
+    "error": {
+      "auth_failed": "Authentication failed — check the credentials/cookie and try again.",
+      "oauth_pending": "Authorization not complete yet. Finish in your browser, then submit again."
+    },
+    "abort": {
+      "reauth_successful": "Re-authentication successful."
+    }
+  },
+  "issues": {
+    "tv_format_changed": {
+      "title": "YouTube TV API format changed",
+      "description": "The YouTube Music TV (youtubei) API returned an unexpected response structure. This usually means YouTube changed their internal API format. To fix this: re-capture the TV format by updating the integration, or switch this entry to Cookie authentication in the integration settings."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "YouTube Music options",
+        "data": {
+          "default_source": "Default speaker (entity_id)",
+          "result_limit": "Search result limit",
+          "autoplay": "Radio/autoplay at queue end"
+        }
+      }
+    }
+  }
+}
