@@ -3,8 +3,8 @@
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const R = globalThis, et = R.ShadowRoot && (R.ShadyCSS === void 0 || R.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, it = Symbol(), at = /* @__PURE__ */ new WeakMap();
-let yt = class {
+const R = globalThis, et = R.ShadowRoot && (R.ShadyCSS === void 0 || R.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, it = Symbol(), nt = /* @__PURE__ */ new WeakMap();
+let xt = class {
   constructor(t, e, i) {
     if (this._$cssResult$ = !0, i !== it) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
     this.cssText = t, this.t = e;
@@ -14,7 +14,7 @@ let yt = class {
     const e = this.t;
     if (et && t === void 0) {
       const i = e !== void 0 && e.length === 1;
-      i && (t = at.get(e)), t === void 0 && ((this.o = t = new CSSStyleSheet()).replaceSync(this.cssText), i && at.set(e, t));
+      i && (t = nt.get(e)), t === void 0 && ((this.o = t = new CSSStyleSheet()).replaceSync(this.cssText), i && nt.set(e, t));
     }
     return t;
   }
@@ -22,33 +22,33 @@ let yt = class {
     return this.cssText;
   }
 };
-const At = (r) => new yt(typeof r == "string" ? r : r + "", void 0, it), q = (r, ...t) => {
+const st = (r) => new xt(typeof r == "string" ? r : r + "", void 0, it), S = (r, ...t) => {
   const e = r.length === 1 ? r[0] : t.reduce((i, s, a) => i + ((n) => {
     if (n._$cssResult$ === !0) return n.cssText;
     if (typeof n == "number") return n;
     throw Error("Value passed to 'css' function must be a 'css' function result: " + n + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
   })(s) + r[a + 1], r[0]);
-  return new yt(e, r, it);
-}, St = (r, t) => {
+  return new xt(e, r, it);
+}, Et = (r, t) => {
   if (et) r.adoptedStyleSheets = t.map((e) => e instanceof CSSStyleSheet ? e : e.styleSheet);
   else for (const e of t) {
     const i = document.createElement("style"), s = R.litNonce;
     s !== void 0 && i.setAttribute("nonce", s), i.textContent = e.cssText, r.appendChild(i);
   }
-}, nt = et ? (r) => r : (r) => r instanceof CSSStyleSheet ? ((t) => {
+}, ot = et ? (r) => r : (r) => r instanceof CSSStyleSheet ? ((t) => {
   let e = "";
   for (const i of t.cssRules) e += i.cssText;
-  return At(e);
+  return st(e);
 })(r) : r;
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const { is: Et, defineProperty: Ct, getOwnPropertyDescriptor: zt, getOwnPropertyNames: Mt, getOwnPropertySymbols: Pt, getPrototypeOf: Tt } = Object, _ = globalThis, ot = _.trustedTypes, Nt = ot ? ot.emptyScript : "", V = _.reactiveElementPolyfillSupport, E = (r, t) => r, J = { toAttribute(r, t) {
+const { is: Ct, defineProperty: zt, getOwnPropertyDescriptor: Mt, getOwnPropertyNames: Pt, getOwnPropertySymbols: Tt, getPrototypeOf: Nt } = Object, _ = globalThis, lt = _.trustedTypes, Ut = lt ? lt.emptyScript : "", V = _.reactiveElementPolyfillSupport, C = (r, t) => r, Z = { toAttribute(r, t) {
   switch (t) {
     case Boolean:
-      r = r ? Nt : null;
+      r = r ? Ut : null;
       break;
     case Object:
     case Array:
@@ -73,7 +73,7 @@ const { is: Et, defineProperty: Ct, getOwnPropertyDescriptor: zt, getOwnProperty
       }
   }
   return e;
-} }, vt = (r, t) => !Et(r, t), lt = { attribute: !0, type: String, converter: J, reflect: !1, useDefault: !1, hasChanged: vt };
+} }, $t = (r, t) => !Ct(r, t), ct = { attribute: !0, type: String, converter: Z, reflect: !1, useDefault: !1, hasChanged: $t };
 Symbol.metadata ?? (Symbol.metadata = Symbol("metadata")), _.litPropertyMetadata ?? (_.litPropertyMetadata = /* @__PURE__ */ new WeakMap());
 let w = class extends HTMLElement {
   static addInitializer(t) {
@@ -82,14 +82,14 @@ let w = class extends HTMLElement {
   static get observedAttributes() {
     return this.finalize(), this._$Eh && [...this._$Eh.keys()];
   }
-  static createProperty(t, e = lt) {
+  static createProperty(t, e = ct) {
     if (e.state && (e.attribute = !1), this._$Ei(), this.prototype.hasOwnProperty(t) && ((e = Object.create(e)).wrapped = !0), this.elementProperties.set(t, e), !e.noAccessor) {
       const i = Symbol(), s = this.getPropertyDescriptor(t, i, e);
-      s !== void 0 && Ct(this.prototype, t, s);
+      s !== void 0 && zt(this.prototype, t, s);
     }
   }
   static getPropertyDescriptor(t, e, i) {
-    const { get: s, set: a } = zt(this.prototype, t) ?? { get() {
+    const { get: s, set: a } = Mt(this.prototype, t) ?? { get() {
       return this[e];
     }, set(n) {
       this[e] = n;
@@ -100,17 +100,17 @@ let w = class extends HTMLElement {
     }, configurable: !0, enumerable: !0 };
   }
   static getPropertyOptions(t) {
-    return this.elementProperties.get(t) ?? lt;
+    return this.elementProperties.get(t) ?? ct;
   }
   static _$Ei() {
-    if (this.hasOwnProperty(E("elementProperties"))) return;
-    const t = Tt(this);
+    if (this.hasOwnProperty(C("elementProperties"))) return;
+    const t = Nt(this);
     t.finalize(), t.l !== void 0 && (this.l = [...t.l]), this.elementProperties = new Map(t.elementProperties);
   }
   static finalize() {
-    if (this.hasOwnProperty(E("finalized"))) return;
-    if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(E("properties"))) {
-      const e = this.properties, i = [...Mt(e), ...Pt(e)];
+    if (this.hasOwnProperty(C("finalized"))) return;
+    if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(C("properties"))) {
+      const e = this.properties, i = [...Pt(e), ...Tt(e)];
       for (const s of i) this.createProperty(s, e[s]);
     }
     const t = this[Symbol.metadata];
@@ -129,8 +129,8 @@ let w = class extends HTMLElement {
     const e = [];
     if (Array.isArray(t)) {
       const i = new Set(t.flat(1 / 0).reverse());
-      for (const s of i) e.unshift(nt(s));
-    } else t !== void 0 && e.push(nt(t));
+      for (const s of i) e.unshift(ot(s));
+    } else t !== void 0 && e.push(ot(t));
     return e;
   }
   static _$Eu(t, e) {
@@ -159,7 +159,7 @@ let w = class extends HTMLElement {
   }
   createRenderRoot() {
     const t = this.shadowRoot ?? this.attachShadow(this.constructor.shadowRootOptions);
-    return St(t, this.constructor.elementStyles), t;
+    return Et(t, this.constructor.elementStyles), t;
   }
   connectedCallback() {
     var t;
@@ -184,7 +184,7 @@ let w = class extends HTMLElement {
     var a;
     const i = this.constructor.elementProperties.get(t), s = this.constructor._$Eu(t, i);
     if (s !== void 0 && i.reflect === !0) {
-      const n = (((a = i.converter) == null ? void 0 : a.toAttribute) !== void 0 ? i.converter : J).toAttribute(e, i.type);
+      const n = (((a = i.converter) == null ? void 0 : a.toAttribute) !== void 0 ? i.converter : Z).toAttribute(e, i.type);
       this._$Em = t, n == null ? this.removeAttribute(s) : this.setAttribute(s, n), this._$Em = null;
     }
   }
@@ -192,17 +192,17 @@ let w = class extends HTMLElement {
     var a, n;
     const i = this.constructor, s = i._$Eh.get(t);
     if (s !== void 0 && this._$Em !== s) {
-      const c = i.getPropertyOptions(s), o = typeof c.converter == "function" ? { fromAttribute: c.converter } : ((a = c.converter) == null ? void 0 : a.fromAttribute) !== void 0 ? c.converter : J;
+      const c = i.getPropertyOptions(s), o = typeof c.converter == "function" ? { fromAttribute: c.converter } : ((a = c.converter) == null ? void 0 : a.fromAttribute) !== void 0 ? c.converter : Z;
       this._$Em = s;
-      const h = o.fromAttribute(e, c.type);
-      this[s] = h ?? ((n = this._$Ej) == null ? void 0 : n.get(s)) ?? h, this._$Em = null;
+      const p = o.fromAttribute(e, c.type);
+      this[s] = p ?? ((n = this._$Ej) == null ? void 0 : n.get(s)) ?? p, this._$Em = null;
     }
   }
   requestUpdate(t, e, i, s = !1, a) {
     var n;
     if (t !== void 0) {
       const c = this.constructor;
-      if (s === !1 && (a = this[t]), i ?? (i = c.getPropertyOptions(t)), !((i.hasChanged ?? vt)(a, e) || i.useDefault && i.reflect && a === ((n = this._$Ej) == null ? void 0 : n.get(t)) && !this.hasAttribute(c._$Eu(t, i)))) return;
+      if (s === !1 && (a = this[t]), i ?? (i = c.getPropertyOptions(t)), !((i.hasChanged ?? $t)(a, e) || i.useDefault && i.reflect && a === ((n = this._$Ej) == null ? void 0 : n.get(t)) && !this.hasAttribute(c._$Eu(t, i)))) return;
       this.C(t, e, i);
     }
     this.isUpdatePending === !1 && (this._$ES = this._$EP());
@@ -278,59 +278,59 @@ let w = class extends HTMLElement {
   firstUpdated(t) {
   }
 };
-w.elementStyles = [], w.shadowRootOptions = { mode: "open" }, w[E("elementProperties")] = /* @__PURE__ */ new Map(), w[E("finalized")] = /* @__PURE__ */ new Map(), V == null || V({ ReactiveElement: w }), (_.reactiveElementVersions ?? (_.reactiveElementVersions = [])).push("2.1.2");
+w.elementStyles = [], w.shadowRootOptions = { mode: "open" }, w[C("elementProperties")] = /* @__PURE__ */ new Map(), w[C("finalized")] = /* @__PURE__ */ new Map(), V == null || V({ ReactiveElement: w }), (_.reactiveElementVersions ?? (_.reactiveElementVersions = [])).push("2.1.2");
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const C = globalThis, ct = (r) => r, L = C.trustedTypes, dt = L ? L.createPolicy("lit-html", { createHTML: (r) => r }) : void 0, xt = "$lit$", b = `lit$${Math.random().toFixed(9).slice(2)}$`, $t = "?" + b, qt = `<${$t}>`, $ = document, P = () => $.createComment(""), T = (r) => r === null || typeof r != "object" && typeof r != "function", st = Array.isArray, Ut = (r) => st(r) || typeof (r == null ? void 0 : r[Symbol.iterator]) == "function", Y = `[ 	
-\f\r]`, S = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, pt = /-->/g, ht = />/g, y = RegExp(`>|${Y}(?:([^\\s"'>=/]+)(${Y}*=${Y}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), ut = /'/g, mt = /"/g, wt = /^(?:script|style|textarea|title)$/i, Ot = (r) => (t, ...e) => ({ _$litType$: r, strings: t, values: e }), l = Ot(1), k = Symbol.for("lit-noChange"), d = Symbol.for("lit-nothing"), ft = /* @__PURE__ */ new WeakMap(), v = $.createTreeWalker($, 129);
-function kt(r, t) {
-  if (!st(r) || !r.hasOwnProperty("raw")) throw Error("invalid template strings array");
-  return dt !== void 0 ? dt.createHTML(t) : t;
+const z = globalThis, dt = (r) => r, I = z.trustedTypes, pt = I ? I.createPolicy("lit-html", { createHTML: (r) => r }) : void 0, wt = "$lit$", b = `lit$${Math.random().toFixed(9).slice(2)}$`, kt = "?" + b, qt = `<${kt}>`, $ = document, T = () => $.createComment(""), N = (r) => r === null || typeof r != "object" && typeof r != "function", rt = Array.isArray, Ot = (r) => rt(r) || typeof (r == null ? void 0 : r[Symbol.iterator]) == "function", Y = `[ 	
+\f\r]`, E = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, ht = /-->/g, ut = />/g, y = RegExp(`>|${Y}(?:([^\\s"'>=/]+)(${Y}*=${Y}*(?:[^ 	
+\f\r"'\`<>=]|("|')|))|$)`, "g"), mt = /'/g, gt = /"/g, At = /^(?:script|style|textarea|title)$/i, Rt = (r) => (t, ...e) => ({ _$litType$: r, strings: t, values: e }), l = Rt(1), k = Symbol.for("lit-noChange"), d = Symbol.for("lit-nothing"), ft = /* @__PURE__ */ new WeakMap(), v = $.createTreeWalker($, 129);
+function St(r, t) {
+  if (!rt(r) || !r.hasOwnProperty("raw")) throw Error("invalid template strings array");
+  return pt !== void 0 ? pt.createHTML(t) : t;
 }
-const Rt = (r, t) => {
+const It = (r, t) => {
   const e = r.length - 1, i = [];
-  let s, a = t === 2 ? "<svg>" : t === 3 ? "<math>" : "", n = S;
+  let s, a = t === 2 ? "<svg>" : t === 3 ? "<math>" : "", n = E;
   for (let c = 0; c < e; c++) {
     const o = r[c];
-    let h, u, p = -1, f = 0;
-    for (; f < o.length && (n.lastIndex = f, u = n.exec(o), u !== null); ) f = n.lastIndex, n === S ? u[1] === "!--" ? n = pt : u[1] !== void 0 ? n = ht : u[2] !== void 0 ? (wt.test(u[2]) && (s = RegExp("</" + u[2], "g")), n = y) : u[3] !== void 0 && (n = y) : n === y ? u[0] === ">" ? (n = s ?? S, p = -1) : u[1] === void 0 ? p = -2 : (p = n.lastIndex - u[2].length, h = u[1], n = u[3] === void 0 ? y : u[3] === '"' ? mt : ut) : n === mt || n === ut ? n = y : n === pt || n === ht ? n = S : (n = y, s = void 0);
-    const g = n === y && r[c + 1].startsWith("/>") ? " " : "";
-    a += n === S ? o + qt : p >= 0 ? (i.push(h), o.slice(0, p) + xt + o.slice(p) + b + g) : o + b + (p === -2 ? c : g);
+    let p, u, h = -1, g = 0;
+    for (; g < o.length && (n.lastIndex = g, u = n.exec(o), u !== null); ) g = n.lastIndex, n === E ? u[1] === "!--" ? n = ht : u[1] !== void 0 ? n = ut : u[2] !== void 0 ? (At.test(u[2]) && (s = RegExp("</" + u[2], "g")), n = y) : u[3] !== void 0 && (n = y) : n === y ? u[0] === ">" ? (n = s ?? E, h = -1) : u[1] === void 0 ? h = -2 : (h = n.lastIndex - u[2].length, p = u[1], n = u[3] === void 0 ? y : u[3] === '"' ? gt : mt) : n === gt || n === mt ? n = y : n === ht || n === ut ? n = E : (n = y, s = void 0);
+    const f = n === y && r[c + 1].startsWith("/>") ? " " : "";
+    a += n === E ? o + qt : h >= 0 ? (i.push(p), o.slice(0, h) + wt + o.slice(h) + b + f) : o + b + (h === -2 ? c : f);
   }
-  return [kt(r, a + (r[e] || "<?>") + (t === 2 ? "</svg>" : t === 3 ? "</math>" : "")), i];
+  return [St(r, a + (r[e] || "<?>") + (t === 2 ? "</svg>" : t === 3 ? "</math>" : "")), i];
 };
-class N {
+class U {
   constructor({ strings: t, _$litType$: e }, i) {
     let s;
     this.parts = [];
     let a = 0, n = 0;
-    const c = t.length - 1, o = this.parts, [h, u] = Rt(t, e);
-    if (this.el = N.createElement(h, i), v.currentNode = this.el.content, e === 2 || e === 3) {
-      const p = this.el.content.firstChild;
-      p.replaceWith(...p.childNodes);
+    const c = t.length - 1, o = this.parts, [p, u] = It(t, e);
+    if (this.el = U.createElement(p, i), v.currentNode = this.el.content, e === 2 || e === 3) {
+      const h = this.el.content.firstChild;
+      h.replaceWith(...h.childNodes);
     }
     for (; (s = v.nextNode()) !== null && o.length < c; ) {
       if (s.nodeType === 1) {
-        if (s.hasAttributes()) for (const p of s.getAttributeNames()) if (p.endsWith(xt)) {
-          const f = u[n++], g = s.getAttribute(p).split(b), O = /([.?@])?(.*)/.exec(f);
-          o.push({ type: 1, index: a, name: O[2], strings: g, ctor: O[1] === "." ? Ht : O[1] === "?" ? It : O[1] === "@" ? Dt : B }), s.removeAttribute(p);
-        } else p.startsWith(b) && (o.push({ type: 6, index: a }), s.removeAttribute(p));
-        if (wt.test(s.tagName)) {
-          const p = s.textContent.split(b), f = p.length - 1;
-          if (f > 0) {
-            s.textContent = L ? L.emptyScript : "";
-            for (let g = 0; g < f; g++) s.append(p[g], P()), v.nextNode(), o.push({ type: 2, index: ++a });
-            s.append(p[f], P());
+        if (s.hasAttributes()) for (const h of s.getAttributeNames()) if (h.endsWith(wt)) {
+          const g = u[n++], f = s.getAttribute(h).split(b), O = /([.?@])?(.*)/.exec(g);
+          o.push({ type: 1, index: a, name: O[2], strings: f, ctor: O[1] === "." ? Ht : O[1] === "?" ? Dt : O[1] === "@" ? jt : W }), s.removeAttribute(h);
+        } else h.startsWith(b) && (o.push({ type: 6, index: a }), s.removeAttribute(h));
+        if (At.test(s.tagName)) {
+          const h = s.textContent.split(b), g = h.length - 1;
+          if (g > 0) {
+            s.textContent = I ? I.emptyScript : "";
+            for (let f = 0; f < g; f++) s.append(h[f], T()), v.nextNode(), o.push({ type: 2, index: ++a });
+            s.append(h[g], T());
           }
         }
-      } else if (s.nodeType === 8) if (s.data === $t) o.push({ type: 2, index: a });
+      } else if (s.nodeType === 8) if (s.data === kt) o.push({ type: 2, index: a });
       else {
-        let p = -1;
-        for (; (p = s.data.indexOf(b, p + 1)) !== -1; ) o.push({ type: 7, index: a }), p += b.length - 1;
+        let h = -1;
+        for (; (h = s.data.indexOf(b, h + 1)) !== -1; ) o.push({ type: 7, index: a }), h += b.length - 1;
       }
       a++;
     }
@@ -344,7 +344,7 @@ function A(r, t, e = r, i) {
   var n, c;
   if (t === k) return t;
   let s = i !== void 0 ? (n = e._$Co) == null ? void 0 : n[i] : e._$Cl;
-  const a = T(t) ? void 0 : t._$litDirective$;
+  const a = N(t) ? void 0 : t._$litDirective$;
   return (s == null ? void 0 : s.constructor) !== a && ((c = s == null ? void 0 : s._$AO) == null || c.call(s, !1), a === void 0 ? s = void 0 : (s = new a(r), s._$AT(r, e, i)), i !== void 0 ? (e._$Co ?? (e._$Co = []))[i] = s : e._$Cl = s), s !== void 0 && (t = A(r, s._$AS(r, t.values), s, i)), t;
 }
 class Lt {
@@ -363,8 +363,8 @@ class Lt {
     let a = v.nextNode(), n = 0, c = 0, o = i[0];
     for (; o !== void 0; ) {
       if (n === o.index) {
-        let h;
-        o.type === 2 ? h = new U(a, a.nextSibling, this, t) : o.type === 1 ? h = new o.ctor(a, o.name, o.strings, this, t) : o.type === 6 && (h = new jt(a, this, t)), this._$AV.push(h), o = i[++c];
+        let p;
+        o.type === 2 ? p = new q(a, a.nextSibling, this, t) : o.type === 1 ? p = new o.ctor(a, o.name, o.strings, this, t) : o.type === 6 && (p = new Wt(a, this, t)), this._$AV.push(p), o = i[++c];
       }
       n !== (o == null ? void 0 : o.index) && (a = v.nextNode(), n++);
     }
@@ -375,7 +375,7 @@ class Lt {
     for (const i of this._$AV) i !== void 0 && (i.strings !== void 0 ? (i._$AI(t, i, e), e += i.strings.length - 2) : i._$AI(t[e])), e++;
   }
 }
-class U {
+class q {
   get _$AU() {
     var t;
     return ((t = this._$AM) == null ? void 0 : t._$AU) ?? this._$Cv;
@@ -395,7 +395,7 @@ class U {
     return this._$AB;
   }
   _$AI(t, e = this) {
-    t = A(this, t, e), T(t) ? t === d || t == null || t === "" ? (this._$AH !== d && this._$AR(), this._$AH = d) : t !== this._$AH && t !== k && this._(t) : t._$litType$ !== void 0 ? this.$(t) : t.nodeType !== void 0 ? this.T(t) : Ut(t) ? this.k(t) : this._(t);
+    t = A(this, t, e), N(t) ? t === d || t == null || t === "" ? (this._$AH !== d && this._$AR(), this._$AH = d) : t !== this._$AH && t !== k && this._(t) : t._$litType$ !== void 0 ? this.$(t) : t.nodeType !== void 0 ? this.T(t) : Ot(t) ? this.k(t) : this._(t);
   }
   O(t) {
     return this._$AA.parentNode.insertBefore(t, this._$AB);
@@ -404,11 +404,11 @@ class U {
     this._$AH !== t && (this._$AR(), this._$AH = this.O(t));
   }
   _(t) {
-    this._$AH !== d && T(this._$AH) ? this._$AA.nextSibling.data = t : this.T($.createTextNode(t)), this._$AH = t;
+    this._$AH !== d && N(this._$AH) ? this._$AA.nextSibling.data = t : this.T($.createTextNode(t)), this._$AH = t;
   }
   $(t) {
     var a;
-    const { values: e, _$litType$: i } = t, s = typeof i == "number" ? this._$AC(t) : (i.el === void 0 && (i.el = N.createElement(kt(i.h, i.h[0]), this.options)), i);
+    const { values: e, _$litType$: i } = t, s = typeof i == "number" ? this._$AC(t) : (i.el === void 0 && (i.el = U.createElement(St(i.h, i.h[0]), this.options)), i);
     if (((a = this._$AH) == null ? void 0 : a._$AD) === s) this._$AH.p(e);
     else {
       const n = new Lt(s, this), c = n.u(this.options);
@@ -417,20 +417,20 @@ class U {
   }
   _$AC(t) {
     let e = ft.get(t.strings);
-    return e === void 0 && ft.set(t.strings, e = new N(t)), e;
+    return e === void 0 && ft.set(t.strings, e = new U(t)), e;
   }
   k(t) {
-    st(this._$AH) || (this._$AH = [], this._$AR());
+    rt(this._$AH) || (this._$AH = [], this._$AR());
     const e = this._$AH;
     let i, s = 0;
-    for (const a of t) s === e.length ? e.push(i = new U(this.O(P()), this.O(P()), this, this.options)) : i = e[s], i._$AI(a), s++;
+    for (const a of t) s === e.length ? e.push(i = new q(this.O(T()), this.O(T()), this, this.options)) : i = e[s], i._$AI(a), s++;
     s < e.length && (this._$AR(i && i._$AB.nextSibling, s), e.length = s);
   }
   _$AR(t = this._$AA.nextSibling, e) {
     var i;
     for ((i = this._$AP) == null ? void 0 : i.call(this, !1, !0, e); t !== this._$AB; ) {
-      const s = ct(t).nextSibling;
-      ct(t).remove(), t = s;
+      const s = dt(t).nextSibling;
+      dt(t).remove(), t = s;
     }
   }
   setConnected(t) {
@@ -438,7 +438,7 @@ class U {
     this._$AM === void 0 && (this._$Cv = t, (e = this._$AP) == null || e.call(this, t));
   }
 }
-class B {
+class W {
   get tagName() {
     return this.element.tagName;
   }
@@ -451,11 +451,11 @@ class B {
   _$AI(t, e = this, i, s) {
     const a = this.strings;
     let n = !1;
-    if (a === void 0) t = A(this, t, e, 0), n = !T(t) || t !== this._$AH && t !== k, n && (this._$AH = t);
+    if (a === void 0) t = A(this, t, e, 0), n = !N(t) || t !== this._$AH && t !== k, n && (this._$AH = t);
     else {
       const c = t;
-      let o, h;
-      for (t = a[0], o = 0; o < a.length - 1; o++) h = A(this, c[i + o], e, o), h === k && (h = this._$AH[o]), n || (n = !T(h) || h !== this._$AH[o]), h === d ? t = d : t !== d && (t += (h ?? "") + a[o + 1]), this._$AH[o] = h;
+      let o, p;
+      for (t = a[0], o = 0; o < a.length - 1; o++) p = A(this, c[i + o], e, o), p === k && (p = this._$AH[o]), n || (n = !N(p) || p !== this._$AH[o]), p === d ? t = d : t !== d && (t += (p ?? "") + a[o + 1]), this._$AH[o] = p;
     }
     n && !s && this.j(t);
   }
@@ -463,7 +463,7 @@ class B {
     t === d ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, t ?? "");
   }
 }
-class Ht extends B {
+class Ht extends W {
   constructor() {
     super(...arguments), this.type = 3;
   }
@@ -471,7 +471,7 @@ class Ht extends B {
     this.element[this.name] = t === d ? void 0 : t;
   }
 }
-class It extends B {
+class Dt extends W {
   constructor() {
     super(...arguments), this.type = 4;
   }
@@ -479,7 +479,7 @@ class It extends B {
     this.element.toggleAttribute(this.name, !!t && t !== d);
   }
 }
-class Dt extends B {
+class jt extends W {
   constructor(t, e, i, s, a) {
     super(t, e, i, s, a), this.type = 5;
   }
@@ -493,7 +493,7 @@ class Dt extends B {
     typeof this._$AH == "function" ? this._$AH.call(((e = this.options) == null ? void 0 : e.host) ?? this.element, t) : this._$AH.handleEvent(t);
   }
 }
-class jt {
+class Wt {
   constructor(t, e, i) {
     this.element = t, this.type = 6, this._$AN = void 0, this._$AM = e, this.options = i;
   }
@@ -504,14 +504,14 @@ class jt {
     A(this, t);
   }
 }
-const F = C.litHtmlPolyfillSupport;
-F == null || F(N, U), (C.litHtmlVersions ?? (C.litHtmlVersions = [])).push("3.3.3");
+const F = z.litHtmlPolyfillSupport;
+F == null || F(U, q), (z.litHtmlVersions ?? (z.litHtmlVersions = [])).push("3.3.3");
 const Bt = (r, t, e) => {
   const i = (e == null ? void 0 : e.renderBefore) ?? t;
   let s = i._$litPart$;
   if (s === void 0) {
     const a = (e == null ? void 0 : e.renderBefore) ?? null;
-    i._$litPart$ = s = new U(t.insertBefore(P(), a), a, void 0, e ?? {});
+    i._$litPart$ = s = new q(t.insertBefore(T(), a), a, void 0, e ?? {});
   }
   return s._$AI(r), s;
 };
@@ -521,7 +521,7 @@ const Bt = (r, t, e) => {
  * SPDX-License-Identifier: BSD-3-Clause
  */
 const x = globalThis;
-class z extends w {
+class M extends w {
   constructor() {
     super(...arguments), this.renderOptions = { host: this }, this._$Do = void 0;
   }
@@ -546,23 +546,23 @@ class z extends w {
     return k;
   }
 }
-var _t;
-z._$litElement$ = !0, z.finalized = !0, (_t = x.litElementHydrateSupport) == null || _t.call(x, { LitElement: z });
-const K = x.litElementPolyfillSupport;
-K == null || K({ LitElement: z });
+var vt;
+M._$litElement$ = !0, M.finalized = !0, (vt = x.litElementHydrateSupport) == null || vt.call(x, { LitElement: M });
+const X = x.litElementPolyfillSupport;
+X == null || X({ LitElement: M });
 (x.litElementVersions ?? (x.litElementVersions = [])).push("4.2.2");
-function Wt(r, t) {
+function Vt(r, t) {
   if (t.entity) return t.entity;
   const e = r.entities ?? {}, i = Object.values(e).filter((a) => a.platform === "ytmusic" && a.entity_id.startsWith("media_player."));
   if (i.length === 1 || i.length > 1) return i[0].entity_id;
   const s = Object.keys(r.states).filter((a) => a.startsWith("media_player.ytmusic_"));
   return s.length ? s[0] : null;
 }
-const Vt = "#ff2d55";
-function Yt(r) {
-  return (r == null ? void 0 : r.accent) || Vt;
+const Yt = "#ff2d55";
+function Ft(r) {
+  return (r == null ? void 0 : r.accent) || Yt;
 }
-const rt = class rt extends z {
+const at = class at extends M {
   setConfig(t) {
     if (!t) throw new Error("Invalid configuration");
     this._config = t;
@@ -571,7 +571,7 @@ const rt = class rt extends z {
     return 3;
   }
   get entityId() {
-    return this.hass && this._config ? Wt(this.hass, this._config) : null;
+    return this.hass && this._config ? Vt(this.hass, this._config) : null;
   }
   get stateObj() {
     var e, i;
@@ -579,7 +579,7 @@ const rt = class rt extends z {
     return t ? (i = (e = this.hass) == null ? void 0 : e.states) == null ? void 0 : i[t] : void 0;
   }
   get accent() {
-    return Yt(this._config ?? {});
+    return Ft(this._config ?? {});
   }
   updated(t) {
     super.updated(t), this.style.setProperty("--ytm-accent", this.accent);
@@ -589,9 +589,9 @@ const rt = class rt extends z {
     s && this.hass.callService(t, e, { entity_id: s, ...i });
   }
 };
-rt.properties = { hass: { attribute: !1 }, _config: { state: !0 } };
-let m = rt;
-const W = q`
+at.properties = { hass: { attribute: !1 }, _config: { state: !0 } };
+let m = at;
+const B = S`
   :host {
     display: block;
     --ytm-accent: #ff3358;
@@ -672,8 +672,19 @@ const W = q`
   }
 
   .empty { color: var(--ytm-dim); text-align: center; padding: 26px 14px; font-size: 13px; }
+
+  /* Reusable bounded scroll region (queue + search lists). Thin themed scrollbar. */
+  .scroll {
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+  }
+  .scroll::-webkit-scrollbar { width: 6px; }
+  .scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.18); border-radius: 99px; }
+  .scroll::-webkit-scrollbar-track { background: transparent; }
 `;
-function Ft(r, t) {
+function Xt(r, t) {
   const e = (r == null ? void 0 : r.attributes) ?? {};
   if (e.media_position == null) return null;
   let i = Number(e.media_position);
@@ -683,26 +694,41 @@ function Ft(r, t) {
   }
   return e.media_duration != null && (i = Math.min(i, Number(e.media_duration))), Math.max(0, i);
 }
-function Z(r) {
+function K(r) {
   if (r == null || !isFinite(r) || r < 0) return "0:00";
   const t = Math.floor(r), e = Math.floor(t / 3600), i = Math.floor(t % 3600 / 60), s = String(t % 60).padStart(2, "0");
   return e > 0 ? `${e}:${String(i).padStart(2, "0")}:${s}` : `${i}:${s}`;
 }
-function M(r) {
+function P(r) {
   return r ? Array.isArray(r) ? r.filter(Boolean).join(", ") : r : "";
 }
 async function Kt(r, t, e, i) {
   const s = { type: "ytmusic/search", entity_id: t, query: e };
   return i && (s.filter = i), (await r.callWS(s)).results ?? [];
 }
-async function gt(r, t, e, i) {
+async function bt(r, t, e, i) {
   const s = { type: "ytmusic/browse", entity_id: t };
   return e && (s.item_type = e), i && (s.item_id = i), (await r.callWS(s)).items ?? [];
 }
 async function Zt(r, t, e) {
   return r.callWS({ type: "ytmusic/lyrics", entity_id: t, video_id: e });
 }
-const Jt = { off: "all", all: "one", one: "off" }, H = class H extends m {
+const Jt = { off: "all", all: "one", one: "off" }, _t = (r) => S`
+  ${r} .card { min-height: auto; }
+  ${r} .stage { flex-direction: row; align-items: center; gap: 28px; }
+  ${r} .cover { width: 200px; height: 200px; margin: 0; }
+  ${r} .body { min-width: 0; }
+  ${r} .meta { text-align: left; }
+  ${r} .ttl { font-size: 26px; }
+  ${r} .sub { font-size: 15px; }
+  ${r} .ctl { margin-top: 18px; }
+  ${r} .trans { justify-content: flex-start; gap: 22px; }
+  ${r} .secrow { justify-content: flex-start; }
+  ${r} .ic { width: 52px; height: 52px; font-size: 20px; }
+  ${r} .ic.big { width: 72px; height: 72px; font-size: 30px; }
+  ${r} .ic.sm { width: 40px; height: 40px; font-size: 15px; }
+  ${r} input[type=range] { width: 120px; }
+`, Qt = st(':host([data-layout="auto"])'), Gt = st(':host([data-layout="wide"])'), L = class L extends m {
   connectedCallback() {
     super.connectedCallback(), this._timer = window.setInterval(() => {
       this._tick = Date.now();
@@ -716,6 +742,10 @@ const Jt = { off: "all", all: "one", one: "off" }, H = class H extends m {
   }
   getCardSize() {
     return 6;
+  }
+  updated(t) {
+    var e;
+    super.updated(t), this.setAttribute("data-layout", ((e = this._config) == null ? void 0 : e.layout) ?? "auto");
   }
   get a() {
     var t;
@@ -751,25 +781,27 @@ const Jt = { off: "all", all: "one", one: "off" }, H = class H extends m {
           </div>
         </div>
       </div></ha-card>`;
-    const i = e.entity_picture ? `url(${e.entity_picture})` : "none", s = t.state === "playing", a = Ft(t, this._tick || Date.now()) ?? 0, n = Number(e.media_duration) || 0, c = n ? Math.min(100, a / n * 100) : 0;
+    const i = e.entity_picture ? `url(${e.entity_picture})` : "none", s = t.state === "playing", a = Xt(t, this._tick || Date.now()) ?? 0, n = Number(e.media_duration) || 0, c = n ? Math.min(100, a / n * 100) : 0;
     return l`<ha-card>
       <div class="card">
         <div class="bg" style="background-image:${i}"></div>
         <div class="veil"></div>
         <div class="inner">
           ${this._showLyrics ? this._renderLyrics(a) : d}
+          <div class="stage" data-test="stage">
           <div class="cover ${e.entity_picture ? "has-art" : ""}"
                style=${e.entity_picture ? `background-image:url(${e.entity_picture})` : ""}
                @click=${() => e.lyrics_supported && this._toggleLyrics()}>
             ${e.entity_picture ? d : l`<span class="ph">♫</span>`}
           </div>
+          <div class="body">
           <div class="meta">
             <div class="ttl">${e.media_title ?? "Nothing playing"}</div>
-            <div class="sub">${M(e.media_artist)}</div>
+            <div class="sub">${P(e.media_artist)}</div>
           </div>
           <div class="ctl">
             <div class="bar" @click=${this._seek}><i style="width:${c}%"></i></div>
-            <div class="times"><span>${Z(a)}</span><span>${Z(n)}</span></div>
+            <div class="times"><span>${K(a)}</span><span>${K(n)}</span></div>
             <div class="trans">
               <button class="ic" data-test="prev"
                       @click=${() => this.callService("media_player", "media_previous_track")}>⏮</button>
@@ -792,6 +824,8 @@ const Jt = { off: "all", all: "one", one: "off" }, H = class H extends m {
                       @click=${() => this.callService("media_player", "volume_mute", { is_volume_muted: !e.is_volume_muted })}>
                 ${e.is_volume_muted ? "🔇" : "🔊"}
               </button>
+              <button class="ic sm" data-test="stop" title="Stop"
+                      @click=${() => this.callService("media_player", "media_stop")}>⏹</button>
               <input data-test="volume" type="range" min="0" max="1" step="0.01"
                      .value=${String(e.volume_level ?? 0)}
                      @change=${(o) => this.callService("media_player", "volume_set", { volume_level: Number(o.target.value) })} />
@@ -800,6 +834,9 @@ const Jt = { off: "all", all: "one", one: "off" }, H = class H extends m {
                         @click=${() => this._sleepMenu = !this._sleepMenu}>⏲</button>`}
               ${e.lyrics_supported && this._config.show_lyrics !== !1 ? l`
                 <button class="ic sm" data-test="lyrics" @click=${this._toggleLyrics}>💬</button>` : d}
+              ${e.source ? l`
+                <button class="ic sm" data-test="disconnect" title="Stop & disconnect speaker"
+                        @click=${() => this.callService("ytmusic", "disconnect")}>⏏</button>` : d}
               <select class="chip"
                       @change=${(o) => this.callService("media_player", "select_source", { source: o.target.value })}>
                 ${(e.source_list ?? []).map((o) => l`<option value=${o} ?selected=${o === e.source}>${o}</option>`)}
@@ -807,6 +844,8 @@ const Jt = { off: "all", all: "one", one: "off" }, H = class H extends m {
             </div>
             ${this._sleepCountdown()}
             ${this._sleepMenu ? this._renderSleepMenu() : d}
+          </div>
+          </div>
           </div>
         </div>
       </div>
@@ -818,7 +857,7 @@ const Jt = { off: "all", all: "one", one: "off" }, H = class H extends m {
       return l`<div class="secrow"><span class="chip active">⏲ stops after this track</span></div>`;
     if (!t.sleep_timer_ends_at) return d;
     const e = Math.max(0, Date.parse(t.sleep_timer_ends_at) - (this._tick || Date.now()));
-    return l`<div class="secrow"><span class="chip active">⏲ ${Z(e / 1e3)} left</span></div>`;
+    return l`<div class="secrow"><span class="chip active">⏲ ${K(e / 1e3)} left</span></div>`;
   }
   _renderSleepMenu() {
     return l`<div class="menu glass">
@@ -852,7 +891,7 @@ const Jt = { off: "all", all: "one", one: "off" }, H = class H extends m {
     return { entity: "" };
   }
 };
-H.properties = { ...m.properties, _tick: { state: !0 }, _showLyrics: { state: !0 }, _lyrics: { state: !0 }, _sleepMenu: { state: !0 } }, H.styles = [W, q`
+L.properties = { ...m.properties, _tick: { state: !0 }, _showLyrics: { state: !0 }, _lyrics: { state: !0 }, _sleepMenu: { state: !0 } }, L.styles = [B, S`
     /* Immersive (direction A): blurred entity_picture backdrop + dark veil; centered cover/title; bottom controls */
     .card { position: relative; border-radius: 20px; overflow: hidden; min-height: 400px; padding: 0; display: flex; flex-direction: column;
       background: radial-gradient(120% 80% at 50% -10%, rgba(255,255,255,.07), transparent 55%), linear-gradient(180deg, #1c2028, #111317);
@@ -861,6 +900,8 @@ H.properties = { ...m.properties, _tick: { state: !0 }, _showLyrics: { state: !0
     .bg { position: absolute; inset: 0; background-size: cover; background-position: center; filter: blur(26px) saturate(1.45) brightness(1.05); transform: scale(1.4); opacity: 1; }
     .veil { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,8,12,.35), rgba(8,8,12,.5) 42%, rgba(8,8,12,.88)); }
     .inner { position: relative; height: 100%; padding: 18px; display: flex; flex-direction: column; flex: 1; }
+    .stage { display: flex; flex-direction: column; flex: 1; }
+    .body { display: flex; flex-direction: column; flex: 1; }
     .cover { width: 138px; height: 138px; border-radius: 16px; margin: 14px auto 16px; background-size: cover; background-position: center; box-shadow: 0 20px 50px -10px rgba(0,0,0,.7); cursor: pointer; flex-shrink: 0; display: grid; place-items: center; background-color: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.10); }
     .cover .ph { font-size: 46px; line-height: 1; color: var(--ytm-accent); opacity: .6; }
     .meta { text-align: center; }
@@ -870,10 +911,10 @@ H.properties = { ...m.properties, _tick: { state: !0 }, _showLyrics: { state: !0
     .bar { margin: 14px 0 6px; }
     .bar > i::after { content: ''; position: absolute; right: -5px; top: 50%; transform: translateY(-50%); width: 11px; height: 11px; border-radius: 50%; background: #fff; }
     .times { display: flex; justify-content: space-between; color: #aeb4c0; font-size: 11px; font-variant-numeric: tabular-nums; }
-    .trans { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 12px; }
-    .ic { width: 38px; height: 38px; font-size: 14px; }
-    .ic.big { width: 52px; height: 52px; font-size: 20px; }
-    .ic.sm { width: 32px; height: 32px; font-size: 12px; }
+    .trans { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 12px; }
+    .ic { width: 46px; height: 46px; font-size: 18px; }
+    .ic.big { width: 64px; height: 64px; font-size: 26px; }
+    .ic.sm { width: 36px; height: 36px; font-size: 14px; }
     .secrow { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
     .chip { display: inline-flex; gap: 6px; align-items: center; padding: 5px 10px; border-radius: 99px; background: rgba(255,255,255,.10); font-size: 12px; color: #dfe3ea; }
     .chip.active { background: var(--ytm-accent); color: #fff; }
@@ -892,14 +933,24 @@ H.properties = { ...m.properties, _tick: { state: !0 }, _showLyrics: { state: !0
     input[type=range]::-moz-range-thumb { width: 12px; height: 12px; border: none; border-radius: 50%; background: #fff; }
     input[type=range]::-moz-range-progress { height: 4px; border-radius: 99px; background: var(--ytm-accent); }
     .speaker-prompt { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 24px 18px; }
+
+    /* Responsive: go wide when the card has room (auto), unless forced compact. */
+    :host { container-type: inline-size; }
+    @container (min-width: 560px) { ${_t(Qt)} }
+    ${_t(Gt)}
   `];
-let X = H;
-customElements.define("ytmusic-now-playing", X);
-class Xt extends m {
+let J = L;
+customElements.define("ytmusic-now-playing", J);
+class te extends m {
   constructor() {
     super(...arguments), this._schema = [
       { name: "entity", selector: { entity: { integration: "ytmusic", domain: "media_player" } } },
       { name: "accent", selector: { text: {} } },
+      { name: "layout", selector: { select: { mode: "dropdown", options: [
+        { value: "auto", label: "Auto (responsive)" },
+        { value: "wide", label: "Wide (landscape)" },
+        { value: "compact", label: "Compact (vertical)" }
+      ] } } },
       { name: "show_lyrics", selector: { boolean: {} } },
       { name: "show_sleep_timer", selector: { boolean: {} } }
     ];
@@ -915,16 +966,16 @@ class Xt extends m {
     this.dispatchEvent(new CustomEvent("config-changed", { detail: { config: t.detail.value }, bubbles: !0, composed: !0 }));
   }
 }
-customElements.define("ytmusic-now-playing-editor", Xt);
+customElements.define("ytmusic-now-playing-editor", te);
 window.customCards = window.customCards ?? [];
 window.customCards.push({ type: "ytmusic-now-playing", name: "YouTube Music — Now Playing", description: "Immersive now-playing + transport for the ytmusic player", preview: !0 });
-const Qt = { song: "music", video: "music", playlist: "playlist", album: "album", artist: "artist" }, bt = [
+const ee = 66, ie = 6, se = { song: "music", video: "music", playlist: "playlist", album: "album", artist: "artist" }, yt = [
   { key: "all", label: "All" },
   { key: "songs", label: "Songs", filter: "songs" },
   { key: "albums", label: "Albums", filter: "albums" },
   { key: "artists", label: "Artists", filter: "artists" },
   { key: "playlists", label: "Playlists", filter: "playlists" }
-], I = class I extends m {
+], H = class H extends m {
   constructor() {
     super(), this._seq = 0, this._q = "", this._tab = "all", this._results = null, this._loading = !1;
   }
@@ -950,7 +1001,7 @@ const Qt = { song: "music", video: "music", playlist: "playlist", album: "album"
     }
     const i = ++this._seq;
     this._loading = !0;
-    const s = this.typed && this._tab !== "all" ? (a = bt.find((n) => n.key === this._tab)) == null ? void 0 : a.filter : void 0;
+    const s = this.typed && this._tab !== "all" ? (a = yt.find((n) => n.key === this._tab)) == null ? void 0 : a.filter : void 0;
     try {
       const n = await Kt(this.hass, this.entityId, e, s);
       i === this._seq && (this._results = n);
@@ -960,7 +1011,7 @@ const Qt = { song: "music", video: "music", playlist: "playlist", album: "album"
   }
   _play(t) {
     this.callService("media_player", "play_media", {
-      media_content_type: Qt[t.kind] ?? "music",
+      media_content_type: se[t.kind] ?? "music",
       media_content_id: t.id,
       extra: { metadata: { title: t.title, artist: t.subtitle, thumbnail: t.thumbnail } }
     });
@@ -977,21 +1028,27 @@ const Qt = { song: "music", video: "music", playlist: "playlist", album: "album"
         ${this._q ? l`<span @click=${() => {
       this._q = "", this._results = null;
     }} style="cursor:pointer">✕</span>` : d}</div>
-      ${this.typed ? l`<div class="tabs" data-test="tabs">${bt.map((t) => l`<button class="tab ${this._tab === t.key ? "on" : ""}" @click=${() => {
+      ${this.typed ? l`<div class="tabs" data-test="tabs">${yt.map((t) => l`<button class="tab ${this._tab === t.key ? "on" : ""}" @click=${() => {
       this._tab = t.key, this.runSearch(this._q);
     }}>${t.label}</button>`)}</div>` : d}
       ${this._renderResults()}
     </div></ha-card>` : l`<ha-card><div class="empty">No YouTube Music entity</div></ha-card>`;
   }
   _renderResults() {
-    return this._loading ? l`<div class="empty">Searching…</div>` : this._results == null ? l`<div class="empty">Search for songs, albums, artists…</div>` : this._results.length ? this._results.map((t) => l`<div class="row">
-      <div class="cov" style=${t.thumbnail ? `background-image:url(${t.thumbnail})` : ""}></div>
-      <div class="meta"><div class="n ttl">${t.title}<span class="badge">${t.kind}</span></div><div class="n sub">${t.subtitle}</div></div>
+    if (this._loading) return l`<div class="empty">Searching…</div>`;
+    if (this._results == null) return l`<div class="empty">Search for songs, albums, artists…</div>`;
+    if (!this._results.length) return l`<div class="empty">No results</div>`;
+    const t = this._config.max_visible ?? ie, e = t > 0 ? t * ee : 0;
+    return l`<div class="scroll" data-test="sscroll" style=${e ? `max-height:${e}px` : d}>
+      ${this._results.map((i) => l`<div class="row">
+      <div class="cov" style=${i.thumbnail ? `background-image:url(${i.thumbnail})` : ""}></div>
+      <div class="meta"><div class="n ttl">${i.title}<span class="badge">${i.kind}</span></div><div class="n sub">${i.subtitle}</div></div>
       <div class="acts">
-        <button class="ic solid" data-test="play" @click=${() => this._play(t)}>▶</button>
-        <button class="ic" data-test="enqueue" @click=${() => this._enqueue(t)}>＋</button>
-        <button class="ic" data-test="more" @click=${() => this._more(t)}>⋯</button>
-      </div></div>`) : l`<div class="empty">No results</div>`;
+        <button class="ic solid" data-test="play" @click=${() => this._play(i)}>▶</button>
+        <button class="ic" data-test="enqueue" @click=${() => this._enqueue(i)}>＋</button>
+        <button class="ic" data-test="more" @click=${() => this._more(i)}>⋯</button>
+      </div></div>`)}
+    </div>`;
   }
   static getConfigElement() {
     return document.createElement("ytmusic-search-editor");
@@ -1000,7 +1057,7 @@ const Qt = { song: "music", video: "music", playlist: "playlist", album: "album"
     return { entity: "" };
   }
 };
-I.properties = { ...m.properties, _q: { state: !0 }, _tab: { state: !0 }, _results: { state: !0 }, _loading: { state: !0 } }, I.styles = [W, q`
+H.properties = { ...m.properties, _q: { state: !0 }, _tab: { state: !0 }, _results: { state: !0 }, _loading: { state: !0 } }, H.styles = [B, S`
     /* Layout B — action list. Ported from docs/superpowers/mockups/search-layout.html */
     .box { display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,.25); border: 1px solid rgba(255,255,255,.10); border-radius: 14px; padding: 11px 14px; transition: border-color .15s ease; }
     .box:focus-within { border-color: var(--ytm-accent); }
@@ -1021,13 +1078,14 @@ I.properties = { ...m.properties, _q: { state: !0 }, _tab: { state: !0 }, _resul
     .badge { font-size: 9px; letter-spacing: .04em; text-transform: uppercase; background: rgba(255,255,255,.14); color: var(--ytm-dim); padding: 2px 6px; border-radius: 6px; margin-left: 8px; vertical-align: middle; }
     .empty { text-align: center; padding: 28px 0; color: var(--ytm-dim); font-size: 14px; }
   `];
-let Q = I;
+let Q = H;
 customElements.define("ytmusic-search", Q);
-class Gt extends m {
+class re extends m {
   constructor() {
     super(...arguments), this._schema = [
       { name: "entity", selector: { entity: { integration: "ytmusic", domain: "media_player" } } },
-      { name: "accent", selector: { text: {} } }
+      { name: "accent", selector: { text: {} } },
+      { name: "max_visible", selector: { number: { min: 0, mode: "box" } } }
     ];
   }
   setConfig(t) {
@@ -1038,10 +1096,10 @@ class Gt extends m {
       @value-changed=${(t) => this.dispatchEvent(new CustomEvent("config-changed", { detail: { config: t.detail.value }, bubbles: !0, composed: !0 }))}></ha-form>`;
   }
 }
-customElements.define("ytmusic-search-editor", Gt);
+customElements.define("ytmusic-search-editor", re);
 window.customCards = window.customCards ?? [];
 window.customCards.push({ type: "ytmusic-search", name: "YouTube Music — Search", description: "Search + queue tracks for the ytmusic player", preview: !0 });
-const D = class D extends m {
+const ae = 58, ne = 7, D = class D extends m {
   constructor() {
     super(), this._drag = null;
   }
@@ -1055,10 +1113,10 @@ const D = class D extends m {
     t !== e && this.callService("ytmusic", "move", { from_index: t, to_index: e }), this._drag = null;
   }
   render() {
-    var s;
-    const t = (s = this.stateObj) == null ? void 0 : s.attributes;
+    var n;
+    const t = (n = this.stateObj) == null ? void 0 : n.attributes;
     if (!t) return l`<ha-card><div class="empty">No YouTube Music entity</div></ha-card>`;
-    const e = t.queue ?? [], i = t.queue_position ?? 0;
+    const e = t.queue ?? [], i = t.queue_position ?? 0, s = this._config.max_visible ?? ne, a = s > 0 ? s * ae : 0;
     return l`<ha-card><div class="glass" style="padding:16px">
       <div class="hdr">
         <span class="label">Up Next</span>
@@ -1068,21 +1126,24 @@ const D = class D extends m {
           <button class="tool" data-test="clear" @click=${() => this.callService("ytmusic", "clear_queue")}>Clear</button>
         </div>
       </div>
-      ${e.length ? e.map((a, n) => l`
-        <div class="qrow ${n === i ? "now" : ""}" data-test="qrow" draggable="true"
-             @click=${() => this.callService("ytmusic", "jump", { index: n })}
-             @dragstart=${() => this._drag = n}
-             @dragover=${(c) => c.preventDefault()}
-             @drop=${(c) => {
-      c.preventDefault(), this._drag != null && this._move(this._drag, n);
+      ${e.length ? l`
+      <div class="scroll" data-test="qscroll" style=${a ? `max-height:${a}px` : d}>
+        ${e.map((c, o) => l`
+        <div class="qrow ${o === i ? "now" : ""}" data-test="qrow" draggable="true"
+             @click=${() => this.callService("ytmusic", "jump", { index: o })}
+             @dragstart=${() => this._drag = o}
+             @dragover=${(p) => p.preventDefault()}
+             @drop=${(p) => {
+      p.preventDefault(), this._drag != null && this._move(this._drag, o);
     }}>
-          ${n === i ? l`<span class="eq">▮▮</span>` : l`<span class="handle" @click=${(c) => c.stopPropagation()}>≡</span>`}
-          <div class="cov" style=${a.thumbnail ? `background-image:url(${a.thumbnail})` : ""}></div>
-          <div class="meta"><div class="n ttl" style="font-size:13px">${a.title}</div><div class="n sub" style="font-size:11.5px">${M(a.artists)}</div></div>
-          ${n === i ? d : l`<button class="x" data-test="remove" @click=${(c) => {
-      c.stopPropagation(), this.callService("ytmusic", "remove", { index: n });
+          ${o === i ? l`<span class="eq">▮▮</span>` : l`<span class="handle" @click=${(p) => p.stopPropagation()}>≡</span>`}
+          <div class="cov" style=${c.thumbnail ? `background-image:url(${c.thumbnail})` : ""}></div>
+          <div class="meta"><div class="n ttl" style="font-size:13px">${c.title}</div><div class="n sub" style="font-size:11.5px">${P(c.artists)}</div></div>
+          ${o === i ? d : l`<button class="x" data-test="remove" @click=${(p) => {
+      p.stopPropagation(), this.callService("ytmusic", "remove", { index: o });
     }}>✕</button>`}
-        </div>`) : l`<div class="empty">Queue is empty</div>`}
+        </div>`)}
+      </div>` : l`<div class="empty">Queue is empty</div>`}
     </div></ha-card>`;
   }
   static getConfigElement() {
@@ -1092,7 +1153,7 @@ const D = class D extends m {
     return { entity: "" };
   }
 };
-D.properties = { ...m.properties, _drag: { state: !0 } }, D.styles = [W, q`
+D.properties = { ...m.properties, _drag: { state: !0 } }, D.styles = [B, S`
     .hdr { display: flex; align-items: center; gap: 8px 10px; margin-bottom: 12px; flex-wrap: wrap; }
     .count { font-size: 11px; font-weight: 700; color: var(--ytm-dim); background: rgba(255,255,255,.08); border-radius: 99px; padding: 2px 8px; }
     .tools { margin-left: auto; display: flex; gap: 8px; }
@@ -1111,7 +1172,7 @@ D.properties = { ...m.properties, _drag: { state: !0 } }, D.styles = [W, q`
   `];
 let G = D;
 customElements.define("ytmusic-queue", G);
-class te extends m {
+class oe extends m {
   constructor() {
     super(...arguments), this._schema = [
       { name: "entity", selector: { entity: { integration: "ytmusic", domain: "media_player" } } },
@@ -1127,7 +1188,7 @@ class te extends m {
       @value-changed=${(t) => this.dispatchEvent(new CustomEvent("config-changed", { detail: { config: t.detail.value }, bubbles: !0, composed: !0 }))}></ha-form>`;
   }
 }
-customElements.define("ytmusic-queue-editor", te);
+customElements.define("ytmusic-queue-editor", oe);
 window.customCards = window.customCards ?? [];
 window.customCards.push({ type: "ytmusic-queue", name: "YouTube Music — Queue", description: "Queue with reorder/remove for the ytmusic player", preview: !0 });
 const j = class j extends m {
@@ -1147,7 +1208,7 @@ const j = class j extends m {
     if (this.entityId) {
       this._loading = !0;
       try {
-        this._root = await gt(this.hass, this.entityId);
+        this._root = await bt(this.hass, this.entityId);
       } finally {
         this._loading = !1;
       }
@@ -1157,7 +1218,7 @@ const j = class j extends m {
     if (!(!this.entityId || !t.id)) {
       this._open = t, this._tracks = null, this._loading = !0;
       try {
-        this._tracks = await gt(this.hass, this.entityId, "playlist", t.id);
+        this._tracks = await bt(this.hass, this.entityId, "playlist", t.id);
       } finally {
         this._loading = !1;
       }
@@ -1171,11 +1232,11 @@ const j = class j extends m {
     this.callService("media_player", "play_media", {
       media_content_type: "music",
       media_content_id: t.video_id,
-      extra: { metadata: { title: t.title, artist: M(t.artists), album: t.album, thumbnail: t.thumbnail, duration: t.duration } }
+      extra: { metadata: { title: t.title, artist: P(t.artists), album: t.album, thumbnail: t.thumbnail, duration: t.duration } }
     });
   }
   _enqueue(t) {
-    this.callService("ytmusic", "enqueue", { video_id: t.video_id, title: t.title, artist: M(t.artists) });
+    this.callService("ytmusic", "enqueue", { video_id: t.video_id, title: t.title, artist: P(t.artists) });
   }
   render() {
     return this.stateObj ? l`<ha-card><div class="glass" style="padding:14px">${this._open ? this._renderDrill() : this._renderRoot()}</div></ha-card>` : l`<ha-card><div class="empty">No YouTube Music entity</div></ha-card>`;
@@ -1198,7 +1259,7 @@ const j = class j extends m {
       ${this._loading && !this._tracks ? l`<div class="empty">Loading…</div>` : (this._tracks ?? []).map((e, i) => l`
         <div class="trow"><span class="num">${i + 1}</span>
           <div class="cov2" style=${e.thumbnail ? `background-image:url(${e.thumbnail})` : ""}></div>
-          <div class="meta"><div class="n2 ttl" style="font-size:13px">${e.title}</div><div class="n2 sub" style="font-size:11.5px">${M(e.artists)}</div></div>
+          <div class="meta"><div class="n2 ttl" style="font-size:13px">${e.title}</div><div class="n2 sub" style="font-size:11.5px">${P(e.artists)}</div></div>
           <div class="acts"><button class="ic solid" @click=${() => this._playTrack(e)}>▶</button><button class="ic" @click=${() => this._enqueue(e)}>＋</button></div>
         </div>`)}`;
   }
@@ -1209,7 +1270,7 @@ const j = class j extends m {
     return { entity: "" };
   }
 };
-j.properties = { ...m.properties, _root: { state: !0 }, _open: { state: !0 }, _tracks: { state: !0 }, _loading: { state: !0 } }, j.styles = [W, q`
+j.properties = { ...m.properties, _root: { state: !0 }, _open: { state: !0 }, _tracks: { state: !0 }, _loading: { state: !0 } }, j.styles = [B, S`
     /* Port from docs/superpowers/mockups/browse-layout.html (root grid A + drill-in). */
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(94px, 1fr)); gap: 14px; }
     .tile { cursor: pointer; transition: transform .12s ease; }
@@ -1231,7 +1292,7 @@ j.properties = { ...m.properties, _root: { state: !0 }, _open: { state: !0 }, _t
   `];
 let tt = j;
 customElements.define("ytmusic-library", tt);
-class ee extends m {
+class le extends m {
   constructor() {
     super(...arguments), this._schema = [
       { name: "entity", selector: { entity: { integration: "ytmusic", domain: "media_player" } } },
@@ -1246,10 +1307,10 @@ class ee extends m {
       @value-changed=${(t) => this.dispatchEvent(new CustomEvent("config-changed", { detail: { config: t.detail.value }, bubbles: !0, composed: !0 }))}></ha-form>`;
   }
 }
-customElements.define("ytmusic-library-editor", ee);
+customElements.define("ytmusic-library-editor", le);
 window.customCards = window.customCards ?? [];
 window.customCards.push({ type: "ytmusic-library", name: "YouTube Music — Library", description: "Browse your library playlists + tracks", preview: !0 });
-const re = "0.1.0";
+const pe = "0.1.0";
 export {
-  re as YTMUSIC_CARD_VERSION
+  pe as YTMUSIC_CARD_VERSION
 };

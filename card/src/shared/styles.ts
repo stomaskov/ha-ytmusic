@@ -86,4 +86,15 @@ export const frostedStyles = css`
   }
 
   .empty { color: var(--ytm-dim); text-align: center; padding: 26px 14px; font-size: 13px; }
+
+  /* Reusable bounded scroll region (queue + search lists). Thin themed scrollbar. */
+  .scroll {
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+  }
+  .scroll::-webkit-scrollbar { width: 6px; }
+  .scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.18); border-radius: 99px; }
+  .scroll::-webkit-scrollbar-track { background: transparent; }
 `;

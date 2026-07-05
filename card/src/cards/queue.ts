@@ -4,6 +4,9 @@ import { frostedStyles } from "../shared/styles";
 import { joinArtists } from "../shared/format";
 import type { CardConfig } from "../shared/types";
 
+const QUEUE_ROW_H = 58; // .qrow: 42px cover + 8+8 padding
+const DEFAULT_MAX_VISIBLE = 7;
+
 class YtmusicQueue extends BaseCard {
   static properties = { ...BaseCard.properties, _drag: { state: true } };
   declare _drag: number | null;
@@ -44,6 +47,8 @@ class YtmusicQueue extends BaseCard {
     if (!a) return html`<ha-card><div class="empty">No YouTube Music entity</div></ha-card>`;
     const queue: any[] = a.queue ?? [];
     const cur = a.queue_position ?? 0;
+    const max = this._config.max_visible ?? DEFAULT_MAX_VISIBLE;
+    const cap = max > 0 ? max * QUEUE_ROW_H : 0;
     return html`<ha-card><div class="glass" style="padding:16px">
       <div class="hdr">
         <span class="label">Up Next</span>
@@ -53,7 +58,9 @@ class YtmusicQueue extends BaseCard {
           <button class="tool" data-test="clear" @click=${() => this.callService("ytmusic", "clear_queue")}>Clear</button>
         </div>
       </div>
-      ${!queue.length ? html`<div class="empty">Queue is empty</div>` : queue.map((t, i) => html`
+      ${!queue.length ? html`<div class="empty">Queue is empty</div>` : html`
+      <div class="scroll" data-test="qscroll" style=${cap ? `max-height:${cap}px` : nothing}>
+        ${queue.map((t, i) => html`
         <div class="qrow ${i === cur ? "now" : ""}" data-test="qrow" draggable="true"
              @click=${() => this.callService("ytmusic", "jump", { index: i })}
              @dragstart=${() => (this._drag = i)}
@@ -64,6 +71,7 @@ class YtmusicQueue extends BaseCard {
           <div class="meta"><div class="n ttl" style="font-size:13px">${t.title}</div><div class="n sub" style="font-size:11.5px">${joinArtists(t.artists)}</div></div>
           ${i === cur ? nothing : html`<button class="x" data-test="remove" @click=${(e: Event) => { e.stopPropagation(); this.callService("ytmusic", "remove", { index: i }); }}>✕</button>`}
         </div>`)}
+      </div>`}
     </div></ha-card>`;
   }
 

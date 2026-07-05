@@ -4,6 +4,8 @@ import { frostedStyles } from "../shared/styles";
 import { search as wsSearch } from "../shared/ws";
 import type { CardConfig, SearchResult } from "../shared/types";
 
+const SEARCH_ROW_H = 66; // .row: 48px cover + 9+9 padding
+const DEFAULT_MAX_VISIBLE = 6;
 const KIND_TO_PLAY: Record<string, string> = { song: "music", video: "music", playlist: "playlist", album: "album", artist: "artist" };
 const TABS: Array<{ key: string; label: string; filter?: string }> = [
   { key: "all", label: "All" }, { key: "songs", label: "Songs", filter: "songs" },
@@ -98,14 +100,18 @@ class YtmusicSearch extends BaseCard {
     if (this._loading) return html`<div class="empty">Searching…</div>`;
     if (this._results == null) return html`<div class="empty">Search for songs, albums, artists…</div>`;
     if (!this._results.length) return html`<div class="empty">No results</div>`;
-    return this._results.map((r) => html`<div class="row">
+    const max = this._config.max_visible ?? DEFAULT_MAX_VISIBLE;
+    const cap = max > 0 ? max * SEARCH_ROW_H : 0;
+    return html`<div class="scroll" data-test="sscroll" style=${cap ? `max-height:${cap}px` : nothing}>
+      ${this._results.map((r) => html`<div class="row">
       <div class="cov" style=${r.thumbnail ? `background-image:url(${r.thumbnail})` : ""}></div>
       <div class="meta"><div class="n ttl">${r.title}<span class="badge">${r.kind}</span></div><div class="n sub">${r.subtitle}</div></div>
       <div class="acts">
         <button class="ic solid" data-test="play" @click=${() => this._play(r)}>▶</button>
         <button class="ic" data-test="enqueue" @click=${() => this._enqueue(r)}>＋</button>
         <button class="ic" data-test="more" @click=${() => this._more(r)}>⋯</button>
-      </div></div>`);
+      </div></div>`)}
+    </div>`;
   }
 
   static getConfigElement() { return document.createElement("ytmusic-search-editor"); }
@@ -118,6 +124,7 @@ class YtmusicSearchEditor extends BaseCard {
   private _schema = [
     { name: "entity", selector: { entity: { integration: "ytmusic", domain: "media_player" } } },
     { name: "accent", selector: { text: {} } },
+    { name: "max_visible", selector: { number: { min: 0, mode: "box" } } },
   ];
   render() {
     if (!this.hass || !this._config) return html``;

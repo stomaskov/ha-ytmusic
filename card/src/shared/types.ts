@@ -20,6 +20,7 @@ export interface CardConfig {
   show_lyrics?: boolean;
   show_sleep_timer?: boolean;
   max_visible?: number;
+  layout?: "auto" | "wide" | "compact";
 }
 
 export interface SearchResult {

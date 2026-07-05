@@ -1,15 +1,29 @@
+from datetime import timedelta
+
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
 
 from homeassistant.components.media_player import MediaPlayerState, SearchMediaQuery
 from homeassistant.core import HomeAssistant, State
 from homeassistant.exceptions import HomeAssistantError
+from homeassistant.util import dt as dt_util
+from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
 from custom_components.ytmusic.backend import SearchItem
 from custom_components.ytmusic.media_player import YtMusicPlayer
 from custom_components.ytmusic.models import Track
 
 _HA_SVC_CALL = "homeassistant.core.ServiceRegistry.async_call"
+_GET_URL = "custom_components.ytmusic.media_player.get_url"
+# A media_content_id that looks like one of OUR signed stream URLs for entry "e1".
+_OUR_URL = "http://ha:8123/api/ytmusic/stream/e1/a/sig"
+
+
+def _pushed_play_media(call) -> bool:
+    """True if any async_call in the mock was a media_player.play_media."""
+    return any(
+        c.args[:2] == ("media_player", "play_media") for c in call.await_args_list
+    )
 
 
 def _track(vid="v1"):
@@ -120,20 +134,102 @@ async def test_advance_on_playing_to_idle(hass):
     player._queue.set_queue([_track("a"), _track("b")])
     player._active = True
     with (
-        patch(
-            "custom_components.ytmusic.media_player.get_url",
-            return_value="http://ha:8123",
-        ),
-        patch("homeassistant.core.ServiceRegistry.async_call", new=AsyncMock()),
+        patch(_GET_URL, return_value="http://ha:8123"),
+        patch(_HA_SVC_CALL, new=AsyncMock()),
     ):
         event = MagicMock()
         event.data = {
-            "old_state": State("media_player.speaker", "playing"),
+            # our stream finished (media_content_id is one of ours) -> advance
+            "old_state": State(
+                "media_player.speaker", "playing", {"media_content_id": _OUR_URL}
+            ),
             "new_state": State("media_player.speaker", "idle"),
         }
         player._handle_source_state(event)
+        # advance is debounced; fire the timer
+        async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=3))
         await hass.async_block_till_done()
     assert player._queue.current().video_id == "b"
+
+
+async def test_no_advance_when_foreign_track_finishes(hass):
+    """A track that wasn't ours finishing must NOT trigger our radio/advance."""
+    player, api = _make_player(hass)
+    api.get_radio.return_value = []
+    player._queue.set_queue([_track("a"), _track("b")])
+    player._active = True
+    with (
+        patch(_GET_URL, return_value="http://ha:8123"),
+        patch(_HA_SVC_CALL, new=AsyncMock()) as call,
+    ):
+        event = MagicMock()
+        event.data = {
+            "old_state": State(
+                "media_player.speaker", "playing", {"media_content_id": "spotify:x"}
+            ),
+            "new_state": State("media_player.speaker", "idle"),
+        }
+        player._handle_source_state(event)
+        async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=3))
+        await hass.async_block_till_done()
+    assert player._queue.current().video_id == "a"  # did not advance
+    assert not _pushed_play_media(call)
+
+
+async def test_release_on_external_takeover(hass):
+    """Another app casting to the speaker -> we stop driving it (no reclaim)."""
+    player, api = _make_player(hass)
+    player._active = True
+    with patch(_HA_SVC_CALL, new=AsyncMock()) as call:
+        event = MagicMock()
+        event.data = {
+            "old_state": State(
+                "media_player.speaker", "playing", {"media_content_id": _OUR_URL}
+            ),
+            "new_state": State(
+                "media_player.speaker", "playing", {"media_content_id": "spotify:x"}
+            ),
+        }
+        player._handle_source_state(event)
+        async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=3))
+        await hass.async_block_till_done()
+    assert player._active is False
+    assert not _pushed_play_media(call)  # never reclaimed the speaker
+
+
+async def test_advance_aborts_when_source_playing_foreign(hass):
+    """Even if an advance is scheduled, it bails if a foreign app now owns the speaker."""
+    player, api = _make_player(hass)
+    api.get_radio.return_value = []
+    player._queue.set_queue([_track("a"), _track("b")])
+    player._active = True
+    hass.states.async_set(
+        "media_player.speaker", "playing", {"media_content_id": "spotify:x"}
+    )
+    with (
+        patch(_GET_URL, return_value="http://ha:8123"),
+        patch(_HA_SVC_CALL, new=AsyncMock()) as call,
+    ):
+        await player._advance()
+    assert player._active is False
+    assert player._queue.current().video_id == "a"  # did not advance
+    assert not _pushed_play_media(call)
+
+
+async def test_disconnect_stops_and_releases_speaker(hass):
+    player, api = _make_player(hass)
+    player._active = True
+    player._source = "media_player.speaker"
+    unsub = MagicMock()
+    player._unsub = unsub
+    with patch(_HA_SVC_CALL, new=AsyncMock()) as call:
+        await player.svc_disconnect()
+    assert player._active is False
+    assert player._source is None
+    unsub.assert_called_once()  # unsubscribed from the speaker's state
+    assert any(
+        c.args[:2] == ("media_player", "media_stop") for c in call.await_args_list
+    )
 
 
 async def test_play_media_music_alias(hass):
@@ -232,6 +328,7 @@ async def test_seek_passthrough(hass: HomeAssistant):
 async def test_supports_mute_and_seek():
     from custom_components.ytmusic.media_player import _SUPPORTED
     from homeassistant.components.media_player import MediaPlayerEntityFeature as F
+
     assert _SUPPORTED & F.VOLUME_MUTE
     assert _SUPPORTED & F.SEEK
 

@@ -1,4 +1,4 @@
-import { html, css, nothing } from "lit";
+import { html, css, nothing, unsafeCSS, type CSSResult } from "lit";
 import { BaseCard } from "../shared/base";
 import { frostedStyles } from "../shared/styles";
 import { currentPosition } from "../shared/position";
@@ -7,6 +7,28 @@ import { lyrics as fetchLyrics } from "../shared/ws";
 import type { CardConfig, LyricsLine } from "../shared/types";
 
 const REPEAT_NEXT: Record<string, string> = { off: "all", all: "one", one: "off" };
+
+// Landscape "hero" layout: large cover left, left-aligned body right, bigger controls.
+// Shared between the responsive container-query path and the forced `layout: wide` path
+// by prefixing every rule with the host selector — no CSS nesting required.
+const wideRules = (s: CSSResult) => css`
+  ${s} .card { min-height: auto; }
+  ${s} .stage { flex-direction: row; align-items: center; gap: 28px; }
+  ${s} .cover { width: 200px; height: 200px; margin: 0; }
+  ${s} .body { min-width: 0; }
+  ${s} .meta { text-align: left; }
+  ${s} .ttl { font-size: 26px; }
+  ${s} .sub { font-size: 15px; }
+  ${s} .ctl { margin-top: 18px; }
+  ${s} .trans { justify-content: flex-start; gap: 22px; }
+  ${s} .secrow { justify-content: flex-start; }
+  ${s} .ic { width: 52px; height: 52px; font-size: 20px; }
+  ${s} .ic.big { width: 72px; height: 72px; font-size: 30px; }
+  ${s} .ic.sm { width: 40px; height: 40px; font-size: 15px; }
+  ${s} input[type=range] { width: 120px; }
+`;
+const WIDE_AUTO = unsafeCSS(':host([data-layout="auto"])');
+const WIDE_FORCED = unsafeCSS(':host([data-layout="wide"])');
 
 class YtmusicNowPlaying extends BaseCard {
   static properties = { ...BaseCard.properties, _tick: { state: true }, _showLyrics: { state: true }, _lyrics: { state: true }, _sleepMenu: { state: true } };
@@ -25,6 +47,8 @@ class YtmusicNowPlaying extends BaseCard {
     .bg { position: absolute; inset: 0; background-size: cover; background-position: center; filter: blur(26px) saturate(1.45) brightness(1.05); transform: scale(1.4); opacity: 1; }
     .veil { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,8,12,.35), rgba(8,8,12,.5) 42%, rgba(8,8,12,.88)); }
     .inner { position: relative; height: 100%; padding: 18px; display: flex; flex-direction: column; flex: 1; }
+    .stage { display: flex; flex-direction: column; flex: 1; }
+    .body { display: flex; flex-direction: column; flex: 1; }
     .cover { width: 138px; height: 138px; border-radius: 16px; margin: 14px auto 16px; background-size: cover; background-position: center; box-shadow: 0 20px 50px -10px rgba(0,0,0,.7); cursor: pointer; flex-shrink: 0; display: grid; place-items: center; background-color: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.10); }
     .cover .ph { font-size: 46px; line-height: 1; color: var(--ytm-accent); opacity: .6; }
     .meta { text-align: center; }
@@ -34,10 +58,10 @@ class YtmusicNowPlaying extends BaseCard {
     .bar { margin: 14px 0 6px; }
     .bar > i::after { content: ''; position: absolute; right: -5px; top: 50%; transform: translateY(-50%); width: 11px; height: 11px; border-radius: 50%; background: #fff; }
     .times { display: flex; justify-content: space-between; color: #aeb4c0; font-size: 11px; font-variant-numeric: tabular-nums; }
-    .trans { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 12px; }
-    .ic { width: 38px; height: 38px; font-size: 14px; }
-    .ic.big { width: 52px; height: 52px; font-size: 20px; }
-    .ic.sm { width: 32px; height: 32px; font-size: 12px; }
+    .trans { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 12px; }
+    .ic { width: 46px; height: 46px; font-size: 18px; }
+    .ic.big { width: 64px; height: 64px; font-size: 26px; }
+    .ic.sm { width: 36px; height: 36px; font-size: 14px; }
     .secrow { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
     .chip { display: inline-flex; gap: 6px; align-items: center; padding: 5px 10px; border-radius: 99px; background: rgba(255,255,255,.10); font-size: 12px; color: #dfe3ea; }
     .chip.active { background: var(--ytm-accent); color: #fff; }
@@ -56,6 +80,11 @@ class YtmusicNowPlaying extends BaseCard {
     input[type=range]::-moz-range-thumb { width: 12px; height: 12px; border: none; border-radius: 50%; background: #fff; }
     input[type=range]::-moz-range-progress { height: 4px; border-radius: 99px; background: var(--ytm-accent); }
     .speaker-prompt { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 24px 18px; }
+
+    /* Responsive: go wide when the card has room (auto), unless forced compact. */
+    :host { container-type: inline-size; }
+    @container (min-width: 560px) { ${wideRules(WIDE_AUTO)} }
+    ${wideRules(WIDE_FORCED)}
   `];
 
   connectedCallback(): void { super.connectedCallback(); this._timer = window.setInterval(() => { this._tick = Date.now(); }, 1000); }
@@ -63,6 +92,11 @@ class YtmusicNowPlaying extends BaseCard {
 
   setConfig(config: CardConfig): void { super.setConfig(config); }
   getCardSize(): number { return 6; }
+
+  updated(changed: Map<string, unknown>): void {
+    super.updated(changed);
+    this.setAttribute("data-layout", this._config?.layout ?? "auto");
+  }
 
   private get a() { return this.stateObj?.attributes ?? {}; }
 
@@ -119,11 +153,13 @@ class YtmusicNowPlaying extends BaseCard {
         <div class="veil"></div>
         <div class="inner">
           ${this._showLyrics ? this._renderLyrics(pos) : nothing}
+          <div class="stage" data-test="stage">
           <div class="cover ${a.entity_picture ? "has-art" : ""}"
                style=${a.entity_picture ? `background-image:url(${a.entity_picture})` : ""}
                @click=${() => a.lyrics_supported && this._toggleLyrics()}>
             ${a.entity_picture ? nothing : html`<span class="ph">♫</span>`}
           </div>
+          <div class="body">
           <div class="meta">
             <div class="ttl">${a.media_title ?? "Nothing playing"}</div>
             <div class="sub">${joinArtists(a.media_artist)}</div>
@@ -153,6 +189,8 @@ class YtmusicNowPlaying extends BaseCard {
                       @click=${() => this.callService("media_player", "volume_mute", { is_volume_muted: !a.is_volume_muted })}>
                 ${a.is_volume_muted ? "🔇" : "🔊"}
               </button>
+              <button class="ic sm" data-test="stop" title="Stop"
+                      @click=${() => this.callService("media_player", "media_stop")}>⏹</button>
               <input data-test="volume" type="range" min="0" max="1" step="0.01"
                      .value=${String(a.volume_level ?? 0)}
                      @change=${(e: Event) => this.callService("media_player", "volume_set", { volume_level: Number((e.target as HTMLInputElement).value) })} />
@@ -161,6 +199,9 @@ class YtmusicNowPlaying extends BaseCard {
                         @click=${() => (this._sleepMenu = !this._sleepMenu)}>⏲</button>`}
               ${a.lyrics_supported && this._config.show_lyrics !== false ? html`
                 <button class="ic sm" data-test="lyrics" @click=${this._toggleLyrics}>💬</button>` : nothing}
+              ${a.source ? html`
+                <button class="ic sm" data-test="disconnect" title="Stop & disconnect speaker"
+                        @click=${() => this.callService("ytmusic", "disconnect")}>⏏</button>` : nothing}
               <select class="chip"
                       @change=${(e: Event) => this.callService("media_player", "select_source", { source: (e.target as HTMLSelectElement).value })}>
                 ${(a.source_list ?? []).map((s: string) => html`<option value=${s} ?selected=${s === a.source}>${s}</option>`)}
@@ -168,6 +209,8 @@ class YtmusicNowPlaying extends BaseCard {
             </div>
             ${this._sleepCountdown()}
             ${this._sleepMenu ? this._renderSleepMenu() : nothing}
+          </div>
+          </div>
           </div>
         </div>
       </div>
@@ -224,6 +267,11 @@ class YtmusicNowPlayingEditor extends BaseCard {
   private _schema = [
     { name: "entity", selector: { entity: { integration: "ytmusic", domain: "media_player" } } },
     { name: "accent", selector: { text: {} } },
+    { name: "layout", selector: { select: { mode: "dropdown", options: [
+      { value: "auto", label: "Auto (responsive)" },
+      { value: "wide", label: "Wide (landscape)" },
+      { value: "compact", label: "Compact (vertical)" },
+    ] } } },
     { name: "show_lyrics", selector: { boolean: {} } },
     { name: "show_sleep_timer", selector: { boolean: {} } },
   ];

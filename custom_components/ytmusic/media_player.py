@@ -23,12 +23,22 @@ from homeassistant.helpers.network import get_url
 from homeassistant.util import dt as dt_util
 
 from . import YtMusicConfigEntry
-from .const import CONF_AUTOPLAY, CONF_DEFAULT_SOURCE, DEFAULT_AUTOPLAY
+from .const import (
+    CONF_AUTOPLAY,
+    CONF_DEFAULT_SOURCE,
+    DEFAULT_AUTOPLAY,
+    STREAM_URL_BASE,
+)
 from .http import build_stream_path
 from .models import RepeatMode, Track
 from .queue import PlayQueue
 
 _LOGGER = logging.getLogger(__name__)
+
+# Delay before advancing to the next track when our stream goes idle. Gives a
+# foreign app that's mid-handoff (brief idle blip while it claims the speaker)
+# time to take over, so we don't fight it by re-pushing our next track.
+_ADVANCE_DEBOUNCE_S = 1.2
 
 _SUPPORTED = (
     MediaPlayerEntityFeature.PLAY
@@ -97,6 +107,7 @@ async def async_setup_entry(
         "start_radio", {vol.Required("video_id"): cv.string}, "svc_start_radio"
     )
     platform.async_register_entity_service("clear_queue", {}, "svc_clear_queue")
+    platform.async_register_entity_service("disconnect", {}, "svc_disconnect")
     platform.async_register_entity_service(
         "remove", {vol.Required("index"): cv.positive_int}, "svc_remove"
     )
@@ -139,6 +150,7 @@ class YtMusicPlayer(MediaPlayerEntity):
         self._attr_unique_id = entry.entry_id
         self._active = False  # True while we're driving the speaker with our queue
         self._unsub = None
+        self._advance_unsub = None  # pending debounced auto-advance timer
         self._sleep_unsub = None
         self._sleep_ends_at = None
         self._sleep_after_track = False
@@ -158,6 +170,7 @@ class YtMusicPlayer(MediaPlayerEntity):
 
     async def async_will_remove_from_hass(self) -> None:
         self._cancel_sleep()
+        self._cancel_pending_advance()
         if self._unsub:
             self._unsub()
 
@@ -293,7 +306,15 @@ class YtMusicPlayer(MediaPlayerEntity):
             duration=meta.get("duration"),
         )
 
+    def _is_our_content(self, state) -> bool:
+        """True if the speaker is playing one of our signed stream URLs."""
+        if state is None:
+            return False
+        cid = state.attributes.get("media_content_id") or ""
+        return f"{STREAM_URL_BASE}/{self._entry.entry_id}" in cid
+
     async def _push_current(self) -> None:
+        self._cancel_pending_advance()
         cur = self._queue.current()
         if not cur or not self._source:
             return
@@ -314,6 +335,13 @@ class YtMusicPlayer(MediaPlayerEntity):
         self.async_write_ha_state()
 
     async def _advance(self) -> None:
+        # Bail if a foreign app grabbed the speaker while we waited to advance —
+        # don't reclaim it from under them.
+        src = self._source_state
+        if src is not None and src.state == "playing" and not self._is_our_content(src):
+            self._active = False
+            self.async_write_ha_state()
+            return
         last = self._queue.current()
         nxt = self._queue.next()
         if (
@@ -336,19 +364,43 @@ class YtMusicPlayer(MediaPlayerEntity):
         new = event.data.get("new_state")
         if new is None:
             return
-        old = event.data.get("old_state")
-        if (
-            self._active
-            and old is not None
-            and old.state == "playing"
-            and new.state == "idle"
-        ):
-            if self._sleep_after_track:
-                self._cancel_sleep()
-                self.hass.async_create_task(self._sleep_pause())
-            else:
-                self.hass.async_create_task(self._advance())
+        if self._active:
+            old = event.data.get("old_state")
+            if new.state == "playing" and not self._is_our_content(new):
+                # Another app (or the user) took over the speaker — stop driving
+                # it so casting from elsewhere works. Re-select a speaker to resume.
+                self._cancel_pending_advance()
+                self._active = False
+            elif (
+                old is not None
+                and old.state == "playing"
+                and new.state == "idle"
+                and self._is_our_content(old)
+            ):
+                # Our track ended — advance after a short debounce so a foreign app
+                # mid-handoff can claim the speaker instead of us re-grabbing it.
+                self._schedule_advance()
         self.async_write_ha_state()
+
+    def _cancel_pending_advance(self) -> None:
+        if self._advance_unsub:
+            self._advance_unsub()
+            self._advance_unsub = None
+
+    def _schedule_advance(self) -> None:
+        self._cancel_pending_advance()
+        self._advance_unsub = async_call_later(
+            self.hass, _ADVANCE_DEBOUNCE_S, self._advance_fire
+        )
+
+    @callback
+    def _advance_fire(self, _now) -> None:
+        self._advance_unsub = None
+        if self._sleep_after_track:
+            self._cancel_sleep()
+            self.hass.async_create_task(self._sleep_pause())
+        else:
+            self.hass.async_create_task(self._advance())
 
     # ---- transport (passthrough) ----
     async def _source_call(self, service: str, data: dict | None = None) -> None:
@@ -368,6 +420,7 @@ class YtMusicPlayer(MediaPlayerEntity):
         await self._source_call("media_pause")
 
     async def async_media_stop(self) -> None:
+        self._cancel_pending_advance()
         self._active = False
         self.async_write_ha_state()
         await self._source_call("media_stop")
@@ -445,6 +498,20 @@ class YtMusicPlayer(MediaPlayerEntity):
     async def svc_clear_queue(self) -> None:
         self._cancel_sleep()
         self._queue.clear()
+        self.async_write_ha_state()
+
+    async def svc_disconnect(self) -> None:
+        """Stop playback and release the speaker so other apps can cast to it."""
+        self._cancel_sleep()
+        self._cancel_pending_advance()
+        was_active = self._active
+        self._active = False
+        if self._source and was_active:
+            await self._source_call("media_stop")
+        if self._unsub:
+            self._unsub()
+            self._unsub = None
+        self._source = None
         self.async_write_ha_state()
 
     async def svc_remove(self, index: int) -> None:

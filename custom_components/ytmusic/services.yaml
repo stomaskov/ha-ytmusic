@@ -28,6 +28,11 @@ clear_queue:
     entity:
       domain: media_player
       integration: ytmusic
+disconnect:
+  target:
+    entity:
+      domain: media_player
+      integration: ytmusic
 remove:
   target:
     entity:

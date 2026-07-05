@@ -1,19 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import "../cards/search";
 
-function el(typed = true) {
+function el(typed = true, extra: Record<string, any> = {}, results?: any[]) {
   const node: any = document.createElement("ytmusic-search");
   const stateObj = { entity_id: "media_player.ytmusic_a", state: "idle", attributes: { typed_search: typed } };
   node.hass = {
     states: { "media_player.ytmusic_a": stateObj }, entities: {},
     callService: vi.fn().mockResolvedValue(undefined),
-    callWS: vi.fn().mockResolvedValue({ results: [{ kind: "song", id: "v1", title: "Get Lucky", subtitle: "Daft Punk", thumbnail: null }] }),
+    callWS: vi.fn().mockResolvedValue({ results: results ?? [{ kind: "song", id: "v1", title: "Get Lucky", subtitle: "Daft Punk", thumbnail: null }] }),
   };
-  node.setConfig({ type: "custom:ytmusic-search", entity: "media_player.ytmusic_a" });
+  node.setConfig({ type: "custom:ytmusic-search", entity: "media_player.ytmusic_a", ...extra });
   document.body.appendChild(node);
   return node;
 }
 beforeEach(() => { document.body.innerHTML = ""; });
+const manyResults = Array.from({ length: 15 }, (_, i) => ({ kind: "song", id: `v${i}`, title: `Song ${i}`, subtitle: "Artist", thumbnail: null }));
 
 describe("ytmusic-search", () => {
   it("queries the WS and renders rows", async () => {
@@ -48,5 +49,19 @@ describe("ytmusic-search", () => {
     document.body.innerHTML = "";
     const mixed = el(false); await mixed.updateComplete;
     expect(mixed.shadowRoot.querySelector('[data-test="tabs"]')).toBeNull();
+  });
+
+  it("max_visible caps the results scroll height", async () => {
+    const node = el(true, { max_visible: 4 }, manyResults);
+    await node.runSearch("x"); await node.updateComplete;
+    const scroll = node.shadowRoot.querySelector('[data-test="sscroll"]');
+    expect(scroll).not.toBeNull();
+    expect(scroll.style.maxHeight).toBe("264px");            // 4 × 66
+  });
+
+  it("defaults to a 6-row cap when max_visible is omitted", async () => {
+    const node = el(true, {}, manyResults);
+    await node.runSearch("x"); await node.updateComplete;
+    expect(node.shadowRoot.querySelector('[data-test="sscroll"]').style.maxHeight).toBe("396px"); // 6 × 66
   });
 });

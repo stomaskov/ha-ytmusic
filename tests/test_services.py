@@ -1,8 +1,14 @@
+from datetime import timedelta
 from unittest.mock import AsyncMock, MagicMock, patch
 
+from homeassistant.util import dt as dt_util
+from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
 from custom_components.ytmusic.media_player import YtMusicPlayer
 from custom_components.ytmusic.models import Track
+
+# a media_content_id matching one of our signed stream URLs for entry "e1"
+_OUR_URL = "http://ha:8123/api/ytmusic/stream/e1/a/sig"
 
 
 def _player(hass):
@@ -73,7 +79,11 @@ async def test_start_radio_replaces_queue(hass):
 async def test_jump_plays_index(hass):
     p = _player(hass)
     p._queue.set_queue(
-        [Track("a", "A", "x", None, None, 1), Track("b", "B", "y", None, None, 1), Track("c", "C", "z", None, None, 1)]
+        [
+            Track("a", "A", "x", None, None, 1),
+            Track("b", "B", "y", None, None, 1),
+            Track("c", "C", "z", None, None, 1),
+        ]
     )
     p._push_current = AsyncMock()
     await p.svc_jump(index=2)
@@ -99,7 +109,9 @@ async def test_sleep_timer_timed_arms_and_fires(hass):
         captured["cb"] = cb
         return MagicMock()  # cancel handle
 
-    with patch("custom_components.ytmusic.media_player.async_call_later", fake_call_later):
+    with patch(
+        "custom_components.ytmusic.media_player.async_call_later", fake_call_later
+    ):
         await p.svc_set_sleep_timer(minutes=30)
     assert captured["delay"] == 1800
     assert p.extra_state_attributes["sleep_timer_ends_at"] is not None
@@ -114,7 +126,10 @@ async def test_sleep_timer_timed_arms_and_fires(hass):
 
 async def test_sleep_timer_cancel(hass):
     p = _player(hass)
-    with patch("custom_components.ytmusic.media_player.async_call_later", return_value=MagicMock()):
+    with patch(
+        "custom_components.ytmusic.media_player.async_call_later",
+        return_value=MagicMock(),
+    ):
         await p.svc_set_sleep_timer(minutes=15)
     await p.svc_set_sleep_timer(minutes=0)
     assert p.extra_state_attributes["sleep_timer_ends_at"] is None
@@ -123,18 +138,24 @@ async def test_sleep_timer_cancel(hass):
 
 async def test_sleep_timer_end_of_track_pauses_on_track_end(hass):
     from homeassistant.core import State
+
     p = _player(hass)
-    p._queue.set_queue([Track("a", "A", "x", None, None, 1), Track("b", "B", "y", None, None, 1)])
+    p._queue.set_queue(
+        [Track("a", "A", "x", None, None, 1), Track("b", "B", "y", None, None, 1)]
+    )
     p._active = True
     await p.svc_set_sleep_timer(end_of_track=True)
     assert p.extra_state_attributes["sleep_timer_end_of_track"] is True
     p._source_call = AsyncMock()
     event = MagicMock()
     event.data = {
-        "old_state": State("media_player.speaker", "playing"),
+        "old_state": State(
+            "media_player.speaker", "playing", {"media_content_id": _OUR_URL}
+        ),
         "new_state": State("media_player.speaker", "idle"),
     }
     p._handle_source_state(event)
+    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=3))
     await hass.async_block_till_done()
     p._source_call.assert_awaited_with("media_pause")
     assert p._queue.current().video_id == "a"  # did NOT advance to b
@@ -143,7 +164,10 @@ async def test_sleep_timer_end_of_track_pauses_on_track_end(hass):
 
 async def test_clear_queue_cancels_sleep_timer(hass):
     p = _player(hass)
-    with patch("custom_components.ytmusic.media_player.async_call_later", return_value=MagicMock()):
+    with patch(
+        "custom_components.ytmusic.media_player.async_call_later",
+        return_value=MagicMock(),
+    ):
         await p.svc_set_sleep_timer(minutes=15)
     await p.svc_clear_queue()
     assert p.extra_state_attributes["sleep_timer_ends_at"] is None
