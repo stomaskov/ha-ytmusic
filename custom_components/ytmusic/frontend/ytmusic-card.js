@@ -727,7 +727,7 @@ const Jt = { off: "all", all: "one", one: "off" }, _t = (r) => S`
   ${r} .ic { width: 52px; height: 52px; font-size: 20px; }
   ${r} .ic.big { width: 72px; height: 72px; font-size: 30px; }
   ${r} .ic.sm { width: 40px; height: 40px; font-size: 15px; }
-  ${r} input[type=range] { width: 120px; }
+  ${r} input[type=range] { flex-basis: 170px; }
 `, Qt = st(':host([data-layout="auto"])'), Gt = st(':host([data-layout="wide"])'), L = class L extends m {
   connectedCallback() {
     super.connectedCallback(), this._timer = window.setInterval(() => {
@@ -750,6 +750,10 @@ const Jt = { off: "all", all: "one", one: "off" }, _t = (r) => S`
   get a() {
     var t;
     return ((t = this.stateObj) == null ? void 0 : t.attributes) ?? {};
+  }
+  _volStep(t) {
+    const e = this.a.volume_level ?? 0, i = Math.min(1, Math.max(0, Math.round((e + t) * 100) / 100));
+    this.callService("media_player", "volume_set", { volume_level: i });
   }
   _toggleLyrics() {
     var t;
@@ -820,15 +824,22 @@ const Jt = { off: "all", all: "one", one: "off" }, _t = (r) => S`
                       @click=${() => this.callService("media_player", "repeat_set", { repeat: Jt[e.repeat ?? "off"] })}>
                 ${e.repeat === "one" ? "🔂" : "🔁"}
               </button>
-              <button class="ic sm" data-test="mute"
-                      @click=${() => this.callService("media_player", "volume_mute", { is_volume_muted: !e.is_volume_muted })}>
-                ${e.is_volume_muted ? "🔇" : "🔊"}
-              </button>
               <button class="ic sm" data-test="stop" title="Stop"
                       @click=${() => this.callService("media_player", "media_stop")}>⏹</button>
-              <input data-test="volume" type="range" min="0" max="1" step="0.01"
-                     .value=${String(e.volume_level ?? 0)}
-                     @change=${(o) => this.callService("media_player", "volume_set", { volume_level: Number(o.target.value) })} />
+              <div class="vol" data-test="volgroup">
+                <button class="ic sm" data-test="mute"
+                        @click=${() => this.callService("media_player", "volume_mute", { is_volume_muted: !e.is_volume_muted })}>
+                  ${e.is_volume_muted ? "🔇" : "🔊"}
+                </button>
+                <button class="ic sm" data-test="voldown" title="Volume down"
+                        @click=${() => this._volStep(-0.05)}>−</button>
+                <input data-test="volume" type="range" min="0" max="1" step="0.01"
+                       .value=${String(e.volume_level ?? 0)}
+                       @change=${(o) => this.callService("media_player", "volume_set", { volume_level: Number(o.target.value) })} />
+                <button class="ic sm" data-test="volup" title="Volume up"
+                        @click=${() => this._volStep(0.05)}>+</button>
+                <span class="vol-pct" data-test="volpct">${Math.round((e.volume_level ?? 0) * 100)}%</span>
+              </div>
               ${this._config.show_sleep_timer === !1 ? d : l`
                 <button class="ic sm" data-test="sleep"
                         @click=${() => this._sleepMenu = !this._sleepMenu}>⏲</button>`}
@@ -928,10 +939,12 @@ L.properties = { ...m.properties, _tick: { state: !0 }, _showLyrics: { state: !0
     .menu .mi { color: #dfe3ea; font-size: 12.5px; padding: 7px 10px; border-radius: 7px; cursor: pointer; }
     .menu .mi:hover { background: rgba(255,255,255,.08); }
     select { background: rgba(255,255,255,.10); color: #fff; border: none; border-radius: 8px; padding: 5px 9px; font-size: 12px; cursor: pointer; max-width: 100%; box-sizing: border-box; }
-    input[type=range] { -webkit-appearance: none; appearance: none; width: 96px; height: 4px; border-radius: 99px; background: rgba(255,255,255,.18); cursor: pointer; vertical-align: middle; }
-    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 12px; height: 12px; border-radius: 50%; background: #fff; }
-    input[type=range]::-moz-range-thumb { width: 12px; height: 12px; border: none; border-radius: 50%; background: #fff; }
-    input[type=range]::-moz-range-progress { height: 4px; border-radius: 99px; background: var(--ytm-accent); }
+    .vol { display: inline-flex; align-items: center; gap: 6px; flex-wrap: nowrap; max-width: 100%; box-sizing: border-box; padding: 3px 8px; border-radius: 99px; background: rgba(255,255,255,.06); }
+    .vol-pct { flex-shrink: 0; min-width: 34px; text-align: right; font-size: 12px; color: #dfe3ea; font-variant-numeric: tabular-nums; }
+    input[type=range] { -webkit-appearance: none; appearance: none; flex: 1 1 120px; min-width: 70px; width: auto; height: 6px; border-radius: 99px; background: rgba(255,255,255,.20); cursor: pointer; vertical-align: middle; }
+    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 19px; height: 19px; border-radius: 50%; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.45); }
+    input[type=range]::-moz-range-thumb { width: 19px; height: 19px; border: none; border-radius: 50%; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.45); }
+    input[type=range]::-moz-range-progress { height: 6px; border-radius: 99px; background: var(--ytm-accent); }
     .speaker-prompt { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 24px 18px; }
 
     /* Responsive: go wide when the card has room (auto), unless forced compact. */

@@ -55,6 +55,40 @@ describe("ytmusic-now-playing", () => {
     expect(node.hass.callService).toHaveBeenCalledWith("media_player", "volume_set", { entity_id: "media_player.ytmusic_a", volume_level: 0.7 });
   });
 
+  it("volume down button steps volume down by 5%", async () => {
+    const node = el({ media_title: "X", volume_level: 0.4 });
+    await node.updateComplete;
+    node.shadowRoot.querySelector('[data-test="voldown"]').click();
+    expect(node.hass.callService).toHaveBeenCalledWith("media_player", "volume_set", { entity_id: "media_player.ytmusic_a", volume_level: 0.35 });
+  });
+
+  it("volume up button steps volume up by 5%", async () => {
+    const node = el({ media_title: "X", volume_level: 0.4 });
+    await node.updateComplete;
+    node.shadowRoot.querySelector('[data-test="volup"]').click();
+    expect(node.hass.callService).toHaveBeenCalledWith("media_player", "volume_set", { entity_id: "media_player.ytmusic_a", volume_level: 0.45 });
+  });
+
+  it("volume up clamps at 1.0", async () => {
+    const node = el({ media_title: "X", volume_level: 0.98 });
+    await node.updateComplete;
+    node.shadowRoot.querySelector('[data-test="volup"]').click();
+    expect(node.hass.callService).toHaveBeenCalledWith("media_player", "volume_set", { entity_id: "media_player.ytmusic_a", volume_level: 1 });
+  });
+
+  it("volume down clamps at 0", async () => {
+    const node = el({ media_title: "X", volume_level: 0.03 });
+    await node.updateComplete;
+    node.shadowRoot.querySelector('[data-test="voldown"]').click();
+    expect(node.hass.callService).toHaveBeenCalledWith("media_player", "volume_set", { entity_id: "media_player.ytmusic_a", volume_level: 0 });
+  });
+
+  it("shows the volume percentage readout", async () => {
+    const node = el({ media_title: "X", volume_level: 0.4 });
+    await node.updateComplete;
+    expect(node.shadowRoot.querySelector('[data-test="volpct"]').textContent).toContain("40%");
+  });
+
   it("defaults the layout to auto (responsive)", async () => {
     const node = el({ media_title: "X" });
     await node.updateComplete;

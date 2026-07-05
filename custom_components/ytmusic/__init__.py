@@ -45,7 +45,7 @@ _VIEW_REGISTERED = "ytmusic_view_registered"
 _CARD_REGISTERED = "ytmusic_card_registered"
 _WS_REGISTERED = "ytmusic_ws_registered"
 _CARD_URL = "/ytmusic/ytmusic-card.js"
-_CARD_VERSION = "0.1.5"  # bump on each card bundle change to bust the frontend cache
+_CARD_VERSION = "0.1.6"  # bump on each card bundle change to bust the frontend cache
 
 
 @dataclass

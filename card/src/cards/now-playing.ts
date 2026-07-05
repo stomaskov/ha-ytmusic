@@ -25,7 +25,7 @@ const wideRules = (s: CSSResult) => css`
   ${s} .ic { width: 52px; height: 52px; font-size: 20px; }
   ${s} .ic.big { width: 72px; height: 72px; font-size: 30px; }
   ${s} .ic.sm { width: 40px; height: 40px; font-size: 15px; }
-  ${s} input[type=range] { width: 120px; }
+  ${s} input[type=range] { flex-basis: 170px; }
 `;
 const WIDE_AUTO = unsafeCSS(':host([data-layout="auto"])');
 const WIDE_FORCED = unsafeCSS(':host([data-layout="wide"])');
@@ -75,10 +75,12 @@ class YtmusicNowPlaying extends BaseCard {
     .menu .mi { color: #dfe3ea; font-size: 12.5px; padding: 7px 10px; border-radius: 7px; cursor: pointer; }
     .menu .mi:hover { background: rgba(255,255,255,.08); }
     select { background: rgba(255,255,255,.10); color: #fff; border: none; border-radius: 8px; padding: 5px 9px; font-size: 12px; cursor: pointer; max-width: 100%; box-sizing: border-box; }
-    input[type=range] { -webkit-appearance: none; appearance: none; width: 96px; height: 4px; border-radius: 99px; background: rgba(255,255,255,.18); cursor: pointer; vertical-align: middle; }
-    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 12px; height: 12px; border-radius: 50%; background: #fff; }
-    input[type=range]::-moz-range-thumb { width: 12px; height: 12px; border: none; border-radius: 50%; background: #fff; }
-    input[type=range]::-moz-range-progress { height: 4px; border-radius: 99px; background: var(--ytm-accent); }
+    .vol { display: inline-flex; align-items: center; gap: 6px; flex-wrap: nowrap; max-width: 100%; box-sizing: border-box; padding: 3px 8px; border-radius: 99px; background: rgba(255,255,255,.06); }
+    .vol-pct { flex-shrink: 0; min-width: 34px; text-align: right; font-size: 12px; color: #dfe3ea; font-variant-numeric: tabular-nums; }
+    input[type=range] { -webkit-appearance: none; appearance: none; flex: 1 1 120px; min-width: 70px; width: auto; height: 6px; border-radius: 99px; background: rgba(255,255,255,.20); cursor: pointer; vertical-align: middle; }
+    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 19px; height: 19px; border-radius: 50%; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.45); }
+    input[type=range]::-moz-range-thumb { width: 19px; height: 19px; border: none; border-radius: 50%; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.45); }
+    input[type=range]::-moz-range-progress { height: 6px; border-radius: 99px; background: var(--ytm-accent); }
     .speaker-prompt { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 24px 18px; }
 
     /* Responsive: go wide when the card has room (auto), unless forced compact. */
@@ -99,6 +101,12 @@ class YtmusicNowPlaying extends BaseCard {
   }
 
   private get a() { return this.stateObj?.attributes ?? {}; }
+
+  private _volStep(delta: number) {
+    const cur = this.a.volume_level ?? 0;
+    const next = Math.min(1, Math.max(0, Math.round((cur + delta) * 100) / 100));
+    this.callService("media_player", "volume_set", { volume_level: next });
+  }
 
   private _toggleLyrics() {
     this._showLyrics = !this._showLyrics;
@@ -185,15 +193,22 @@ class YtmusicNowPlaying extends BaseCard {
                       @click=${() => this.callService("media_player", "repeat_set", { repeat: REPEAT_NEXT[a.repeat ?? "off"] })}>
                 ${a.repeat === "one" ? "🔂" : "🔁"}
               </button>
-              <button class="ic sm" data-test="mute"
-                      @click=${() => this.callService("media_player", "volume_mute", { is_volume_muted: !a.is_volume_muted })}>
-                ${a.is_volume_muted ? "🔇" : "🔊"}
-              </button>
               <button class="ic sm" data-test="stop" title="Stop"
                       @click=${() => this.callService("media_player", "media_stop")}>⏹</button>
-              <input data-test="volume" type="range" min="0" max="1" step="0.01"
-                     .value=${String(a.volume_level ?? 0)}
-                     @change=${(e: Event) => this.callService("media_player", "volume_set", { volume_level: Number((e.target as HTMLInputElement).value) })} />
+              <div class="vol" data-test="volgroup">
+                <button class="ic sm" data-test="mute"
+                        @click=${() => this.callService("media_player", "volume_mute", { is_volume_muted: !a.is_volume_muted })}>
+                  ${a.is_volume_muted ? "🔇" : "🔊"}
+                </button>
+                <button class="ic sm" data-test="voldown" title="Volume down"
+                        @click=${() => this._volStep(-0.05)}>−</button>
+                <input data-test="volume" type="range" min="0" max="1" step="0.01"
+                       .value=${String(a.volume_level ?? 0)}
+                       @change=${(e: Event) => this.callService("media_player", "volume_set", { volume_level: Number((e.target as HTMLInputElement).value) })} />
+                <button class="ic sm" data-test="volup" title="Volume up"
+                        @click=${() => this._volStep(0.05)}>+</button>
+                <span class="vol-pct" data-test="volpct">${Math.round((a.volume_level ?? 0) * 100)}%</span>
+              </div>
               ${this._config.show_sleep_timer === false ? nothing : html`
                 <button class="ic sm" data-test="sleep"
                         @click=${() => (this._sleepMenu = !this._sleepMenu)}>⏲</button>`}
